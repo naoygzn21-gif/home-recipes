@@ -1,12 +1,16 @@
 /* =====================================================
    settings.js — おうちごはん帖 サイト設定
-   管理画面「設定を保存」ボタンで上書き更新します
+   更新日時: 2026/3/29 23:31:42
    ===================================================== */
 var SETTINGS_DATA = {
-  adminEmail:    "admin@example.com",
-  adminPw:       "admin1234",
-  themeCss:      "",
-  sections:      { videos: true, gallery: true, favorites: true },
-  slideImages:   [],
-  slideInterval: 5000
+  "adminEmail": "nao.ygzn21@gmail.com",
+  "adminPw": "kaikuu08",
+  "themeCss": "",
+  "sections": {
+    "videos": true,
+    "gallery": true,
+    "favorites": true
+  },
+  "slideImages": [],
+  "slideInterval": 5000
 };
