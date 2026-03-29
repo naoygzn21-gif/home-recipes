@@ -977,7 +977,7 @@ let favorites       = new Set();
 let currentCat      = 'all';
 let currentSearch   = '';
 
-const recipes = _sd && _sd.recipes && _sd.recipes.length ? _sd.recipes : [
+let recipes = _sd && _sd.recipes && _sd.recipes.length ? JSON.parse(JSON.stringify(_sd.recipes)) : [
   {id:1,emoji:'🥘',category:'meal',catLabel:'ごはん',title:'やさしい豚肉の煮込み',desc:'野菜と一緒にじっくり煮込んだ、ほっこり温まる一品。週末にまとめて作っておくと便利です。',time:'45分',level:'普通',tags:['煮込み','豚肉','作り置き'],ingredients:[['豚バラ肉','300g'],['大根','1/4本'],['にんじん','1本'],['しょうゆ','大さじ3'],['みりん','大さじ2'],['砂糖','大さじ1']],steps:['豚肉を食べやすい大きさに切る','野菜を乱切りにする','鍋に材料と調味料を入れて中火で煮る','弱火で30分ほどじっくり煮込む']},
   {id:2,emoji:'☕',category:'drink',catLabel:'ドリンク',title:'ほうじ茶ラテ 香ばしい一杯',desc:'香ばしいほうじ茶とミルクの組み合わせ。寒い日のおやつタイムにぴったり。',time:'8分',level:'簡単',tags:['ほうじ茶','ラテ','温かい'],ingredients:[['ほうじ茶葉','大さじ1'],['お湯','100ml'],['牛乳','150ml'],['はちみつ','お好みで']],steps:['濃いめにほうじ茶を煮出す','牛乳を温めて泡立てる','カップにほうじ茶を注ぎ、ミルクをのせる']},
   {id:3,emoji:'🍰',category:'sweets',catLabel:'スイーツ',title:'しっとりりんごのケーキ',desc:'旬のりんごをたっぷり使った素朴なケーキ。シナモンの香りが食欲をそそります。',time:'50分',level:'普通',tags:['りんご','ケーキ','秋冬'],ingredients:[['りんご','2個'],['薄力粉','150g'],['砂糖','100g'],['バター','80g'],['卵','2個'],['シナモン','小さじ1']],steps:['りんごを薄切りにする','バターと砂糖をよく混ぜる','卵・薄力粉を加えて混ぜる','りんごを並べて180℃で35分焼く']},
