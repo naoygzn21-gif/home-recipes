@@ -1,12 +1,12 @@
 /* ===================================================
    data.js — おうちごはん帖 共有データファイル
    管理画面の「データを保存」ボタンで上書き更新します
-   更新日時: 2026/3/29 15:10:27
+   更新日時: 2026/3/29 21:14:19
    =================================================== */
 SITE_DATA = {
   "adminEmail": "nao.ygzn21@gmail.com",
   "adminPw": "kaikuu08",
-  "themeCss": ":root { --bg:#fffbf4;--paper:#ffffff;--paper2:#fef5e4;--ink:#2a3d28;--ink-mid:#60A468;--ink-lt:#8fc498;--accent:#D38C42;--accent-lt:#fdefc8;--accent-md:#F6DC9A;--sub:#60A468;--border:#b8ddb8;--border2:#60A468;--rule:#d8ecd8;--tape:rgba(96,164,104,0.4); }",
+  "themeCss": ":root {\n    --bg:#fffbf4;--paper:#ffffff;--paper2:#ffff9d;\n    --ink:#2a3d28;--ink-mid:#69bfb2;--ink-lt:#91e7da;\n    --accent:#eaa8a4;--accent-lt:#fff8f4;--accent-md:#e1da75;\n    --sub:#69bfb2;--border:#a5fbee;--border2:#69bfb2;\n    --rule:#affff8;--tape:#69bfb266;\n  }",
   "sections": {
     "videos": true,
     "gallery": true,
