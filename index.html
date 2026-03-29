@@ -4,7 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>おうちごはん帖</title>
-<script src="data.js"></script>
+<script>
+var SETTINGS_DATA = {
+  adminEmail:'admin@example.com', adminPw:'admin1234',
+  themeCss:'', sections:{videos:true,gallery:true,favorites:true},
+  slideImages:[], slideInterval:5000
+};
+</script>
+<script src="settings.js"></script>
+<script>
+/* settings.js のカラー設定を即時適用 */
+(function(){
+  if (SETTINGS_DATA.themeCss) {
+    var s = document.createElement('style');
+    s.id = 'dynamic-theme';
+    s.textContent = SETTINGS_DATA.themeCss;
+    document.head.appendChild(s);
+  }
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&family=Kaisei+Opti:wght@400;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {

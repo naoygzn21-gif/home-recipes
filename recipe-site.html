@@ -4,26 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>おうちごはん帖</title>
+<!-- デフォルトデータ（外部JSで上書きされます） -->
 <script>
-/* デフォルトのSITE_DATA（data.jsが読み込まれると上書きされます） */
-var SITE_DATA = {
-  adminEmail: "admin@example.com",
-  adminPw:    "admin1234",
-  themeCss:   "",
-  sections:   { videos: true, gallery: true, favorites: true },
-  slideImages:   [],
-  slideInterval: 5000,
-  recipes: [
-    {id:1,emoji:'🥘',category:'meal',catLabel:'ごはん',title:'やさしい豚肉の煮込み',desc:'野菜と一緒にじっくり煮込んだ、ほっこり温まる一品。週末にまとめて作っておくと便利です。',time:'45分',level:'普通',tags:['煮込み','豚肉','作り置き'],ingredients:[['豚バラ肉','300g'],['大根','1/4本'],['にんじん','1本'],['しょうゆ','大さじ3'],['みりん','大さじ2'],['砂糖','大さじ1']],steps:['豚肉を食べやすい大きさに切る','野菜を乱切りにする','鍋に材料と調味料を入れて中火で煮る','弱火で30分ほどじっくり煮込む']},
-    {id:2,emoji:'☕',category:'drink',catLabel:'ドリンク',title:'ほうじ茶ラテ 香ばしい一杯',desc:'香ばしいほうじ茶とミルクの組み合わせ。寒い日のおやつタイムにぴったり。',time:'8分',level:'簡単',tags:['ほうじ茶','ラテ','温かい'],ingredients:[['ほうじ茶葉','大さじ1'],['お湯','100ml'],['牛乳','150ml'],['はちみつ','お好みで']],steps:['濃いめにほうじ茶を煮出す','牛乳を温めて泡立てる','カップにほうじ茶を注ぎ、ミルクをのせる']},
-    {id:3,emoji:'🍰',category:'sweets',catLabel:'スイーツ',title:'しっとりりんごのケーキ',desc:'旬のりんごをたっぷり使った素朴なケーキ。シナモンの香りが食欲をそそります。',time:'50分',level:'普通',tags:['りんご','ケーキ','秋冬'],ingredients:[['りんご','2個'],['薄力粉','150g'],['砂糖','100g'],['バター','80g'],['卵','2個'],['シナモン','小さじ1']],steps:['りんごを薄切りにする','バターと砂糖をよく混ぜる','卵・薄力粉を加えて混ぜる','りんごを並べて180℃で35分焼く']},
-    {id:4,emoji:'🥪',category:'bread',catLabel:'パン・サンド',title:'たまごサンド 昔ながらの味',desc:'ゆで卵をたっぷり使ったクリーミーなたまごサンド。懐かしくて飽きない定番レシピ。',time:'15分',level:'簡単',tags:['サンド','たまご','定番'],ingredients:[['食パン','4枚'],['ゆで卵','3個'],['マヨネーズ','大さじ3'],['塩・こしょう','適量'],['バター','適量']],steps:['ゆで卵をつぶしてマヨネーズで和える','塩こしょうで味を整える','パンにバターを塗り、具をはさむ','端を切りそろえて完成']},
-    {id:5,emoji:'🍲',category:'soup',catLabel:'スープ',title:'体が温まるみそ汁 具だくさん',desc:'豆腐・わかめ・ねぎの定番みそ汁。毎日飲みたくなるやさしい味わいです。',time:'15分',level:'簡単',tags:['みそ汁','和食','毎日'],ingredients:[['豆腐','1/2丁'],['わかめ','適量'],['長ねぎ','1/3本'],['だし汁','600ml'],['みそ','大さじ2']],steps:['だし汁を温める','豆腐をさいの目切りにする','具材を加えてひと煮立ちさせる','みそを溶き入れて完成']},
-    {id:6,emoji:'🍳',category:'meal',catLabel:'ごはん',title:'親子丼 ふんわり卵でとじる',desc:'鶏肉と卵のやさしい甘辛味。半熟仕上げがポイントの、家族みんなが喜ぶ一品。',time:'20分',level:'簡単',tags:['丼','鶏肉','卵'],ingredients:[['鶏もも肉','200g'],['卵','3個'],['玉ねぎ','1/2個'],['だし汁','150ml'],['しょうゆ','大さじ2'],['みりん','大さじ2']],steps:['鶏肉と玉ねぎを炒め煮にする','卵を溶いて2回に分けて流し入れる','半熟でご飯の上にのせる']}
-  ]
+var RECIPES_DATA = [];
+var SETTINGS_DATA = {
+  adminEmail:'admin@example.com', adminPw:'admin1234',
+  themeCss:'', sections:{videos:true,gallery:true,favorites:true},
+  slideImages:[], slideInterval:5000
 };
 </script>
-<script src="data.js"></script>
+<script src="recipes.js"></script>
+<script src="settings.js"></script>
+<script>
+/* settings.js のカラー設定を即時適用（チラつき防止） */
+(function(){
+  if (SETTINGS_DATA.themeCss) {
+    var s = document.createElement('style');
+    s.id = 'dynamic-theme';
+    s.textContent = SETTINGS_DATA.themeCss;
+    document.head.appendChild(s);
+  }
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&family=Kaisei+Opti:wght@400;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /* ===== THEME VARIABLES ===== */
@@ -804,6 +806,10 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
       <div id="tab-list" style="display:none">
         <div class="adm-section-title">登録済みレシピ</div>
         <div class="adm-list" id="adm-recipe-list"></div>
+        <div style="margin-top:1.2rem;padding-top:1rem;border-top:1.5px dashed var(--border);">
+          <button onclick="downloadRecipes()" style="width:100%;background:var(--accent);color:#fff;border:none;padding:.72rem;border-radius:3px;font-family:'Kaisei Opti',serif;font-size:0.95rem;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">⬇ レシピを保存（recipes.js）</button>
+          <div id="dl-recipes-msg" style="font-size:0.8rem;color:#0f6e56;text-align:center;margin-top:.5rem;display:none;"></div>
+        </div>
       </div>
 
       <!-- スライドショータブ -->
@@ -833,13 +839,17 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
       <!-- サイト仕様タブ -->
       <div id="tab-spec" style="display:none">
         <div class="adm-section-title">サイトを保存・更新する</div>
-        <div style="background:var(--accent-lt);border:2px solid var(--border2);border-radius:6px;padding:1.2rem 1.4rem;margin-bottom:1.4rem;">
-          <p style="font-size:0.82rem;color:var(--ink);margin-bottom:.6rem;font-weight:500;">📥 データファイルを保存して全ページに反映</p>
-          <p style="font-size:0.82rem;color:var(--ink-mid);line-height:1.8;margin-bottom:1rem;">追加・変更した内容（レシピ・写真・カラーなど）を <strong>data.js</strong> としてダウンロードします。<br>フォルダに上書きして Netlify に再アップロードすると <strong>index.html・recipe-site.html の両方に自動反映</strong>されます。</p>
-          <button onclick="downloadSite()" style="width:100%;background:var(--accent);color:#fff;border:none;padding:.8rem;border-radius:4px;font-family:'Kaisei Opti',serif;font-size:1rem;cursor:pointer;letter-spacing:.08em;transition:opacity .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
-            ⬇ data.js をダウンロード
-          </button>
-          <div id="dl-msg" style="font-size:0.8rem;color:#0f6e56;text-align:center;margin-top:.6rem;display:none;">✓ データを保存しました！</div>
+        <div style="background:var(--accent-lt);border:2px solid var(--border2);border-radius:6px;padding:1.2rem 1.4rem;margin-bottom:1rem;">
+          <p style="font-size:0.88rem;color:var(--ink);margin-bottom:.5rem;font-weight:500;">📋 レシピデータを保存（recipes.js）</p>
+          <p style="font-size:0.82rem;color:var(--ink-mid);line-height:1.8;margin-bottom:.8rem;">レシピの追加・削除をGitHubに反映したいときに使います。</p>
+          <button onclick="downloadRecipes()" style="width:100%;background:var(--accent);color:#fff;border:none;padding:.75rem;border-radius:4px;font-family:'Kaisei Opti',serif;font-size:0.95rem;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">⬇ recipes.js をダウンロード</button>
+          <div id="dl-recipes-msg" style="font-size:0.8rem;color:#0f6e56;text-align:center;margin-top:.5rem;display:none;"></div>
+        </div>
+        <div style="background:var(--sage-lt, #e8f0e0);border:2px solid var(--border);border-radius:6px;padding:1.2rem 1.4rem;margin-bottom:1.4rem;">
+          <p style="font-size:0.88rem;color:var(--ink);margin-bottom:.5rem;font-weight:500;">⚙ サイト設定を保存（settings.js）</p>
+          <p style="font-size:0.82rem;color:var(--ink-mid);line-height:1.8;margin-bottom:.8rem;">カラー・セクション表示・スライドショー・パスワードの変更をGitHubに反映したいときに使います。</p>
+          <button onclick="downloadSettings()" style="width:100%;background:var(--sub);color:#fff;border:none;padding:.75rem;border-radius:4px;font-family:'Kaisei Opti',serif;font-size:0.95rem;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">⬇ settings.js をダウンロード</button>
+          <div id="dl-settings-msg" style="font-size:0.8rem;color:#0f6e56;text-align:center;margin-top:.5rem;display:none;"></div>
         </div>
         <div class="adm-section-title">サイト仕様</div>
         <div style="font-size:0.84rem;color:var(--ink-mid);line-height:2;background:var(--paper2);border:1.5px solid var(--border);border-radius:4px;padding:1.2rem 1.4rem;">
@@ -963,31 +973,32 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
   </div>
 </div>
 
+
 <script>
-/* ===== 全変数を先頭で宣言（letのtemporal dead zoneを回避） ===== */
-const _sd = (typeof SITE_DATA !== 'undefined') ? SITE_DATA : null;
-let ADMIN_PW        = _sd ? _sd.adminPw       : 'admin1234';
-let ADMIN_EMAIL     = _sd ? _sd.adminEmail     : 'admin@example.com';
-let slideImages     = _sd ? (_sd.slideImages   || []) : [];
-let slideIntervalMs = _sd ? (_sd.slideInterval || 5000) : 5000;
+/* =====================================================
+   おうちごはん帖 — メインスクリプト
+   変数はすべてここで宣言（temporal dead zone 回避）
+   ===================================================== */
+
+/* --- 状態変数 --- */
+let ADMIN_EMAIL     = SETTINGS_DATA.adminEmail    || 'admin@example.com';
+let ADMIN_PW        = SETTINGS_DATA.adminPw       || 'admin1234';
+let slideImages     = (SETTINGS_DATA.slideImages  || []).slice();
+let slideIntervalMs = SETTINGS_DATA.slideInterval  || 5000;
 let adminUnlocked   = false;
 let slideIndex      = 0;
 let slideTimer      = null;
 let favorites       = new Set();
 let currentCat      = 'all';
 let currentSearch   = '';
+let currentImgData  = null;
 
-let recipes = _sd && _sd.recipes && _sd.recipes.length ? JSON.parse(JSON.stringify(_sd.recipes)) : [
-  {id:1,emoji:'🥘',category:'meal',catLabel:'ごはん',title:'やさしい豚肉の煮込み',desc:'野菜と一緒にじっくり煮込んだ、ほっこり温まる一品。週末にまとめて作っておくと便利です。',time:'45分',level:'普通',tags:['煮込み','豚肉','作り置き'],ingredients:[['豚バラ肉','300g'],['大根','1/4本'],['にんじん','1本'],['しょうゆ','大さじ3'],['みりん','大さじ2'],['砂糖','大さじ1']],steps:['豚肉を食べやすい大きさに切る','野菜を乱切りにする','鍋に材料と調味料を入れて中火で煮る','弱火で30分ほどじっくり煮込む']},
-  {id:2,emoji:'☕',category:'drink',catLabel:'ドリンク',title:'ほうじ茶ラテ 香ばしい一杯',desc:'香ばしいほうじ茶とミルクの組み合わせ。寒い日のおやつタイムにぴったり。',time:'8分',level:'簡単',tags:['ほうじ茶','ラテ','温かい'],ingredients:[['ほうじ茶葉','大さじ1'],['お湯','100ml'],['牛乳','150ml'],['はちみつ','お好みで']],steps:['濃いめにほうじ茶を煮出す','牛乳を温めて泡立てる','カップにほうじ茶を注ぎ、ミルクをのせる']},
-  {id:3,emoji:'🍰',category:'sweets',catLabel:'スイーツ',title:'しっとりりんごのケーキ',desc:'旬のりんごをたっぷり使った素朴なケーキ。シナモンの香りが食欲をそそります。',time:'50分',level:'普通',tags:['りんご','ケーキ','秋冬'],ingredients:[['りんご','2個'],['薄力粉','150g'],['砂糖','100g'],['バター','80g'],['卵','2個'],['シナモン','小さじ1']],steps:['りんごを薄切りにする','バターと砂糖をよく混ぜる','卵・薄力粉を加えて混ぜる','りんごを並べて180℃で35分焼く']},
-  {id:4,emoji:'🥪',category:'bread',catLabel:'パン・サンド',title:'たまごサンド 昔ながらの味',desc:'ゆで卵をたっぷり使ったクリーミーなたまごサンド。懐かしくて飽きない定番レシピ。',time:'15分',level:'簡単',tags:['サンド','たまご','定番'],ingredients:[['食パン','4枚'],['ゆで卵','3個'],['マヨネーズ','大さじ3'],['塩・こしょう','適量'],['バター','適量']],steps:['ゆで卵をつぶしてマヨネーズで和える','塩こしょうで味を整える','パンにバターを塗り、具をはさむ','端を切りそろえて完成']},
-  {id:5,emoji:'🍲',category:'soup',catLabel:'スープ',title:'体が温まるみそ汁 具だくさん',desc:'豆腐・わかめ・ねぎの定番みそ汁。毎日飲みたくなるやさしい味わいです。',time:'15分',level:'簡単',tags:['みそ汁','和食','毎日'],ingredients:[['豆腐','1/2丁'],['わかめ','適量'],['長ねぎ','1/3本'],['だし汁','600ml'],['みそ','大さじ2']],steps:['だし汁を温める','豆腐をさいの目切りにする','具材を加えてひと煮立ちさせる','みそを溶き入れて完成']},
-  {id:6,emoji:'🍳',category:'meal',catLabel:'ごはん',title:'親子丼 ふんわり卵でとじる',desc:'鶏肉と卵のやさしい甘辛味。半熟仕上げがポイントの、家族みんなが喜ぶ一品。',time:'20分',level:'簡単',tags:['丼','鶏肉','卵'],ingredients:[['鶏もも肉','200g'],['卵','3個'],['玉ねぎ','1/2個'],['だし汁','150ml'],['しょうゆ','大さじ2'],['みりん','大さじ2']],steps:['鶏肉と玉ねぎを炒め煮にする','卵を溶いて2回に分けて流し入れる','半熟でご飯の上にのせる']}
-];
+/* recipes は RECIPES_DATA（外部JS）から読み込む */
+let recipes = JSON.parse(JSON.stringify(RECIPES_DATA.length ? RECIPES_DATA : []));
 
-/* ===== 管理画面 ===== */
-
+/* =====================================================
+   管理画面
+   ===================================================== */
 function openAdmin() {
   document.getElementById('adm-overlay').classList.add('open');
   document.getElementById('adm-email-input').value = '';
@@ -1001,6 +1012,7 @@ function openAdmin() {
 }
 function closeAdmin() { document.getElementById('adm-overlay').classList.remove('open'); }
 function closeAdminOverlay(e) { if (e.target.id === 'adm-overlay') closeAdmin(); }
+
 function checkPw() {
   const email = document.getElementById('adm-email-input').value.trim();
   const pw    = document.getElementById('adm-pw-input').value;
@@ -1014,6 +1026,7 @@ function checkPw() {
     document.getElementById('adm-pw-input').value = '';
   }
 }
+
 function changeEmail() {
   const ne = document.getElementById('new-email').value.trim();
   const msg = document.getElementById('pw-msg');
@@ -1021,10 +1034,12 @@ function changeEmail() {
   ADMIN_EMAIL = ne;
   document.getElementById('new-email').value = '';
   msg.style.display='block'; msg.style.color='#0f6e56'; msg.textContent='✓ メールアドレスを変更しました';
-  setTimeout(()=>msg.style.display='none',2500);
+  setTimeout(()=>msg.style.display='none', 2500);
 }
 
-/* ===== LIGHTBOX ===== */
+/* =====================================================
+   ライトボックス
+   ===================================================== */
 function openLightbox(src) {
   document.getElementById('lightbox-img').src = src;
   document.getElementById('lightbox').classList.add('open');
@@ -1035,15 +1050,15 @@ function closeLightbox() {
   document.body.style.overflow = '';
 }
 
-/* ===== SLIDESHOW ===== */
-
+/* =====================================================
+   スライドショー
+   ===================================================== */
 function renderSlideshow() {
   const ss = document.getElementById('hero-slideshow');
+  if (!ss) return;
   const prev = ss.querySelector('.slide-prev');
   const next = ss.querySelector('.slide-next');
   const dotsEl = document.getElementById('slide-dots');
-
-  // スライド再構築
   ss.querySelectorAll('.hero-slide').forEach(s => s.remove());
   if (slideImages.length === 0) {
     const def = document.createElement('div');
@@ -1067,34 +1082,22 @@ function renderSlideshow() {
   ).join('');
   startSlideTimer();
 }
-
-function goSlide(n) {
-  slideIndex = (n + slideImages.length) % slideImages.length;
-  renderSlideshow();
-}
-function slidePrev() { if(slideImages.length) goSlide(slideIndex - 1); }
-function slideNext() { if(slideImages.length) goSlide(slideIndex + 1); }
-
+function goSlide(n) { slideIndex = (n + slideImages.length) % slideImages.length; renderSlideshow(); }
+function slidePrev() { if (slideImages.length) goSlide(slideIndex - 1); }
+function slideNext() { if (slideImages.length) goSlide(slideIndex + 1); }
 function startSlideTimer() {
   if (slideTimer) clearInterval(slideTimer);
-  if (slideIntervalMs > 0 && slideImages.length > 1) {
+  if (slideIntervalMs > 0 && slideImages.length > 1)
     slideTimer = setInterval(() => goSlide(slideIndex + 1), slideIntervalMs);
-  }
 }
 function updateSlideInterval() {
   slideIntervalMs = parseInt(document.getElementById('slide-interval').value);
   startSlideTimer();
 }
 function addSlideImages(input) {
-  const files = Array.from(input.files);
-  let loaded = 0;
-  files.forEach(file => {
+  Array.from(input.files).forEach(file => {
     const reader = new FileReader();
-    reader.onload = e => {
-      slideImages.push(e.target.result);
-      loaded++;
-      if (loaded === files.length) { renderSlideshow(); renderSlideThumbs(); }
-    };
+    reader.onload = e => { slideImages.push(e.target.result); renderSlideshow(); renderSlideThumbs(); };
     reader.readAsDataURL(file);
   });
   input.value = '';
@@ -1107,118 +1110,62 @@ function renderSlideThumbs() {
       <img src="${src}">
       <button class="slide-thumb-del" onclick="event.stopPropagation();deleteSlide(${i})">×</button>
     </div>`).join('') || '<span style="font-size:0.82rem;color:var(--ink-lt);">まだ写真がありません</span>';
-  const specSlides = document.getElementById('spec-slides');
-  if (specSlides) specSlides.textContent = slideImages.length + '枚';
+  const el = document.getElementById('spec-slides');
+  if (el) el.textContent = slideImages.length + '枚';
 }
 function deleteSlide(i) {
   slideImages.splice(i, 1);
   if (slideIndex >= slideImages.length) slideIndex = Math.max(0, slideImages.length - 1);
-  renderSlideshow();
-  renderSlideThumbs();
+  renderSlideshow(); renderSlideThumbs();
 }
 
-function syncPicker(pickerId, hexVal) {
-  if (/^#[0-9a-fA-F]{6}$/.test(hexVal)) {
-    document.getElementById(pickerId).value = hexVal;
-    updateColorPreview();
-  }
-}
-function syncText(textId, hexVal) {
-  document.getElementById(textId).value = hexVal;
-  updateColorPreview();
-}
-function updateColorPreview() {
-  const c1 = document.getElementById('ci-1').value;
-  const c2 = document.getElementById('ci-2').value;
-  const c3 = document.getElementById('ci-3').value;
-  if (/^#[0-9a-fA-F]{6}$/.test(c1)) { document.getElementById('cprev-1').style.background = c1; }
-  if (/^#[0-9a-fA-F]{6}$/.test(c2)) { document.getElementById('cprev-2').style.background = c2; }
-  if (/^#[0-9a-fA-F]{6}$/.test(c3)) { document.getElementById('cprev-3').style.background = c3; }
-}
-function applyCustomColors() {
-  const c1 = document.getElementById('ci-1').value.trim();
-  const c2 = document.getElementById('ci-2').value.trim();
-  const c3 = document.getElementById('ci-3').value.trim();
-  if (![c1,c2,c3].every(c => /^#[0-9a-fA-F]{6}$/.test(c))) {
-    alert('カラーコードは #から始まる6桁で入力してください（例：#D38C42）');
-    return;
-  }
-  // c1=メイン(accent), c2=サブ(sub/ink-mid/border2), c3=アクセント淡(accent-md/F6DC9A系)
-  const lighten = (hex, amt) => {
-    let r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
-    r=Math.min(255,r+amt); g=Math.min(255,g+amt); b=Math.min(255,b+amt);
-    return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
-  };
-  const darkInk = '#2a3d28';
-  let styleEl = document.getElementById('dynamic-theme');
-  if (!styleEl) { styleEl = document.createElement('style'); styleEl.id='dynamic-theme'; document.head.appendChild(styleEl); }
-  styleEl.textContent = `:root {
-    --bg:#fffbf4;--paper:#ffffff;--paper2:${lighten(c3,40)};
-    --ink:${darkInk};--ink-mid:${c2};--ink-lt:${lighten(c2,40)};
-    --accent:${c1};--accent-lt:${lighten(c1,80)};--accent-md:${c3};
-    --sub:${c2};--border:${lighten(c2,60)};--border2:${c2};
-    --rule:${lighten(c2,70)};--tape:${c2}66;
-  }`;
-  const msg = document.getElementById('color-apply-msg');
-  msg.style.display = 'block';
-  setTimeout(() => msg.style.display = 'none', 2500);
-}
-function resetColors() {
-  const defaults = { 'ci-1':'#D38C42','cp-1':'#D38C42','ci-2':'#60A468','cp-2':'#60A468','ci-3':'#F6DC9A','cp-3':'#F6DC9A' };
-  Object.entries(defaults).forEach(([id,val]) => { document.getElementById(id).value = val; });
-  updateColorPreview();
-  applyTheme('t-harvest');
-  const msg = document.getElementById('color-apply-msg');
-  msg.textContent = '✓ デフォルトカラーに戻しました';
-  msg.style.display = 'block';
-  setTimeout(() => { msg.style.display='none'; msg.textContent='✓ カラーを適用しました！'; }, 2500);
-}
-
-function switchTab(name, btn) {
-  ['add','list','slideshow','settings','spec'].forEach(t => {
-    const el = document.getElementById('tab-'+t);
-    if (el) el.style.display = t===name ? 'block' : 'none';
-  });
-  document.querySelectorAll('.adm-tab').forEach(b => b.classList.remove('active'));
+/* =====================================================
+   写真入力（管理画面）
+   ===================================================== */
+function switchImgTab(mode, btn) {
+  document.getElementById('img-upload-area').style.display = mode==='upload' ? 'block' : 'none';
+  document.getElementById('img-url-area').style.display   = mode==='url'    ? 'block' : 'none';
+  document.querySelectorAll('.img-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  if (name === 'list') renderAdmList();
-  if (name === 'slideshow') renderSlideThumbs();
-  if (name === 'spec') {
-    const sc = document.getElementById('spec-count');
-    const ss = document.getElementById('spec-slides');
-    if (sc) sc.textContent = recipes.length + '件';
-    if (ss) ss.textContent = slideImages.length + '枚';
-  }
-  if (name === 'settings') {
-    buildColorPicker();
-    ['videos','gallery','favorites'].forEach(s => {
-      const el = document.getElementById('sec-'+s);
-      const cb = document.getElementById('vis-'+s);
-      if (el && cb) cb.checked = el.style.display !== 'none';
-    });
-    if (!document.getElementById('ci-1').value) {
-      document.getElementById('ci-1').value = '#D38C42';
-      document.getElementById('cp-1').value = '#D38C42';
-      document.getElementById('ci-2').value = '#60A468';
-      document.getElementById('cp-2').value = '#60A468';
-      document.getElementById('ci-3').value = '#F6DC9A';
-      document.getElementById('cp-3').value = '#F6DC9A';
-      updateColorPreview();
-    }
-  }
+  clearImgPreview();
 }
+function clearImgPreview() {
+  document.getElementById('img-preview').innerHTML = '<span>プレビューがここに表示されます</span>';
+  const fi = document.getElementById('f-img-file'); if (fi) fi.value='';
+  const ui = document.getElementById('f-img-url');  if (ui) ui.value='';
+  currentImgData = null;
+}
+function previewFile(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    currentImgData = e.target.result;
+    document.getElementById('img-preview').innerHTML = `<img src="${currentImgData}">`;
+  };
+  reader.readAsDataURL(file);
+}
+function previewUrl(url) {
+  if (!url) { document.getElementById('img-preview').innerHTML='<span>プレビューがここに表示されます</span>'; currentImgData=null; return; }
+  currentImgData = url;
+  document.getElementById('img-preview').innerHTML = `<img src="${url}" onerror="this.parentElement.innerHTML='<span>画像を読み込めませんでした</span>';currentImgData=null;">`;
+}
+
+/* =====================================================
+   レシピ CRUD
+   ===================================================== */
 function addIngRow() {
-  const d = document.createElement('div'); d.className = 'ing-row';
+  const d = document.createElement('div'); d.className='ing-row';
   d.innerHTML = '<input type="text" placeholder="材料名"><input type="text" placeholder="分量" style="max-width:100px"><button class="del-row" onclick="delRow(this)">×</button>';
   document.getElementById('ing-rows').appendChild(d);
 }
 function addStepRow() {
   const n = document.getElementById('step-rows').querySelectorAll('.step-row').length + 1;
-  const d = document.createElement('div'); d.className = 'step-row';
+  const d = document.createElement('div'); d.className='step-row';
   d.innerHTML = `<input type="text" placeholder="手順${n}"><button class="del-row" onclick="delRow(this)">×</button>`;
   document.getElementById('step-rows').appendChild(d);
 }
 function delRow(btn) { btn.parentElement.remove(); }
+
 function addRecipe() {
   const emoji = document.getElementById('f-emoji').value.trim() || '🍽';
   const cat   = document.getElementById('f-cat').value;
@@ -1235,24 +1182,112 @@ function addRecipe() {
     if (ins[0].value.trim()) ings.push([ins[0].value.trim(), ins[1].value.trim()]);
   });
   const steps = [];
-  document.getElementById('step-rows').querySelectorAll('.step-row input').forEach(inp => { if (inp.value.trim()) steps.push(inp.value.trim()); });
-  recipes.push({ id: recipes.length ? Math.max(...recipes.map(r=>r.id))+1 : 1, emoji, image: currentImgData||null, category:cat, catLabel:catMap[cat], title, desc, time, level, tags, ingredients:ings, steps });
+  document.getElementById('step-rows').querySelectorAll('.step-row input').forEach(inp => {
+    if (inp.value.trim()) steps.push(inp.value.trim());
+  });
+  const newId = recipes.length ? Math.max(...recipes.map(r=>r.id)) + 1 : 1;
+  recipes.push({ id:newId, emoji, image:currentImgData||null, category:cat, catLabel:catMap[cat], title, desc, time, level, tags, ingredients:ings, steps });
   ['f-emoji','f-title','f-desc','f-time','f-tags'].forEach(id => document.getElementById(id).value='');
-  clearImgPreview();
   document.getElementById('ing-rows').innerHTML = '<div class="ing-row"><input type="text" placeholder="材料名"><input type="text" placeholder="分量" style="max-width:100px"><button class="del-row" onclick="delRow(this)">×</button></div><div class="ing-row"><input type="text" placeholder="材料名"><input type="text" placeholder="分量" style="max-width:100px"><button class="del-row" onclick="delRow(this)">×</button></div>';
   document.getElementById('step-rows').innerHTML = '<div class="step-row"><input type="text" placeholder="手順1"><button class="del-row" onclick="delRow(this)">×</button></div><div class="step-row"><input type="text" placeholder="手順2"><button class="del-row" onclick="delRow(this)">×</button></div>';
-  const suc = document.getElementById('adm-success'); suc.style.display='block'; setTimeout(()=>suc.style.display='none',2500);
+  clearImgPreview();
+  const suc = document.getElementById('adm-success'); suc.style.display='block'; setTimeout(()=>suc.style.display='none', 2500);
   renderRecipes(); renderFavorites();
 }
+
 function renderAdmList() {
   const list = document.getElementById('adm-recipe-list');
-  list.innerHTML = recipes.length ? recipes.map(r=>`<div class="adm-item"><div class="adm-item-left">${r.image ? `<img src="${r.image}" style="width:32px;height:32px;object-fit:cover;border-radius:3px;border:1px solid var(--border);">` : `<span class="adm-item-emoji">${r.emoji||'🍽'}</span>`}<span>${r.title}</span></div><button class="adm-del-btn" onclick="deleteRecipe(${r.id})">削除</button></div>`).join('') : '<p style="color:var(--ink-lt);font-size:0.86rem;text-align:center;padding:1rem;">レシピがありません</p>';
+  list.innerHTML = recipes.length ? recipes.map(r=>`
+    <div class="adm-item">
+      <div class="adm-item-left">
+        ${r.image ? `<img src="${r.image}" style="width:32px;height:32px;object-fit:cover;border-radius:3px;border:1px solid var(--border);">` : `<span class="adm-item-emoji">${r.emoji||'🍽'}</span>`}
+        <span>${r.title}</span>
+      </div>
+      <button class="adm-del-btn" onclick="deleteRecipe(${r.id})">削除</button>
+    </div>`).join('') : '<p style="color:var(--ink-lt);font-size:0.86rem;text-align:center;padding:1rem;">レシピがありません</p>';
+  const el = document.getElementById('spec-count'); if (el) el.textContent = recipes.length + '件';
 }
+
 function deleteRecipe(id) {
   if (!confirm('このレシピを削除しますか？')) return;
-  const idx = recipes.findIndex(r=>r.id===id); if (idx!==-1) recipes.splice(idx,1);
+  const idx = recipes.findIndex(r=>r.id===id);
+  if (idx !== -1) recipes.splice(idx, 1);
   renderAdmList(); renderRecipes(); renderFavorites();
 }
+
+/* =====================================================
+   タブ切替
+   ===================================================== */
+function switchTab(name, btn) {
+  ['add','list','slideshow','settings','spec'].forEach(t => {
+    const el = document.getElementById('tab-'+t);
+    if (el) el.style.display = t===name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.adm-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (name === 'list') renderAdmList();
+  if (name === 'slideshow') renderSlideThumbs();
+  if (name === 'spec') {
+    const sc = document.getElementById('spec-count'); if (sc) sc.textContent = recipes.length+'件';
+    const ss = document.getElementById('spec-slides'); if (ss) ss.textContent = slideImages.length+'枚';
+  }
+  if (name === 'settings') {
+    ['videos','gallery','favorites'].forEach(s => {
+      const el = document.getElementById('sec-'+s);
+      const cb = document.getElementById('vis-'+s);
+      if (el && cb) cb.checked = el.style.display !== 'none';
+    });
+    if (!document.getElementById('ci-1').value) {
+      document.getElementById('ci-1').value = '#D38C42'; document.getElementById('cp-1').value = '#D38C42';
+      document.getElementById('ci-2').value = '#60A468'; document.getElementById('cp-2').value = '#60A468';
+      document.getElementById('ci-3').value = '#F6DC9A'; document.getElementById('cp-3').value = '#F6DC9A';
+      updateColorPreview();
+    }
+  }
+}
+
+function toggleSection(secId, visible) {
+  const el = document.getElementById(secId);
+  if (el) el.style.display = visible ? '' : 'none';
+}
+
+/* =====================================================
+   カラー設定
+   ===================================================== */
+function syncPicker(pickerId, hexVal) {
+  if (/^#[0-9a-fA-F]{6}$/.test(hexVal)) { document.getElementById(pickerId).value = hexVal; updateColorPreview(); }
+}
+function syncText(textId, hexVal) { document.getElementById(textId).value = hexVal; updateColorPreview(); }
+function updateColorPreview() {
+  const c1=document.getElementById('ci-1').value, c2=document.getElementById('ci-2').value, c3=document.getElementById('ci-3').value;
+  if (/^#[0-9a-fA-F]{6}$/.test(c1)) document.getElementById('cprev-1').style.background=c1;
+  if (/^#[0-9a-fA-F]{6}$/.test(c2)) document.getElementById('cprev-2').style.background=c2;
+  if (/^#[0-9a-fA-F]{6}$/.test(c3)) document.getElementById('cprev-3').style.background=c3;
+}
+function applyCustomColors() {
+  const c1=document.getElementById('ci-1').value.trim();
+  const c2=document.getElementById('ci-2').value.trim();
+  const c3=document.getElementById('ci-3').value.trim();
+  if (![c1,c2,c3].every(c=>/^#[0-9a-fA-F]{6}$/.test(c))) { alert('カラーコードは #から始まる6桁で入力してください'); return; }
+  const lighten = (hex,amt) => { let r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16); return '#'+[Math.min(255,r+amt),Math.min(255,g+amt),Math.min(255,b+amt)].map(x=>x.toString(16).padStart(2,'0')).join(''); };
+  let s = document.getElementById('dynamic-theme') || document.createElement('style');
+  s.id='dynamic-theme';
+  s.textContent=`:root{--bg:#fffbf4;--paper:#ffffff;--paper2:${lighten(c3,40)};--ink:#2a3d28;--ink-mid:${c2};--ink-lt:${lighten(c2,40)};--accent:${c1};--accent-lt:${lighten(c1,80)};--accent-md:${c3};--sub:${c2};--border:${lighten(c2,60)};--border2:${c2};--rule:${lighten(c2,70)};--tape:${c2}66;}`;
+  if (!s.parentNode) document.head.appendChild(s);
+  const msg=document.getElementById('color-apply-msg'); msg.style.display='block'; setTimeout(()=>msg.style.display='none',2500);
+}
+function resetColors() {
+  const defs={'ci-1':'#D38C42','cp-1':'#D38C42','ci-2':'#60A468','cp-2':'#60A468','ci-3':'#F6DC9A','cp-3':'#F6DC9A'};
+  Object.entries(defs).forEach(([id,val])=>document.getElementById(id).value=val);
+  updateColorPreview();
+  applyTheme('t-harvest');
+  const msg=document.getElementById('color-apply-msg'); msg.style.display='block';
+  msg.textContent='✓ デフォルトカラーに戻しました'; setTimeout(()=>{msg.style.display='none';msg.textContent='✓ カラーを適用しました！';},2500);
+}
+
+/* =====================================================
+   パスワード変更
+   ===================================================== */
 function changePw() {
   const np=document.getElementById('new-pw').value, np2=document.getElementById('new-pw2').value;
   const msg=document.getElementById('pw-msg');
@@ -1263,123 +1298,54 @@ function changePw() {
   setTimeout(()=>msg.style.display='none',2500);
 }
 
-function switchImgTab(mode, btn) {
-  document.getElementById('img-upload-area').style.display = mode==='upload' ? 'block' : 'none';
-  document.getElementById('img-url-area').style.display   = mode==='url'    ? 'block' : 'none';
-  document.querySelectorAll('.img-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  clearImgPreview();
-}
-function clearImgPreview() {
-  document.getElementById('img-preview').innerHTML = '<span>プレビューがここに表示されます</span>';
-  if(document.getElementById('f-img-file')) document.getElementById('f-img-file').value='';
-  if(document.getElementById('f-img-url')) document.getElementById('f-img-url').value='';
-  currentImgData = null;
-}
-let currentImgData = null;
-function previewFile(input) {
-  const file = input.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    currentImgData = e.target.result;
-    document.getElementById('img-preview').innerHTML = `<img src="${currentImgData}">`;
-  };
-  reader.readAsDataURL(file);
-}
-function previewUrl(url) {
-  if (!url) { document.getElementById('img-preview').innerHTML='<span>プレビューがここに表示されます</span>'; currentImgData=null; return; }
-  currentImgData = url;
-  document.getElementById('img-preview').innerHTML = `<img src="${url}" onerror="this.parentElement.innerHTML='<span>画像を読み込めませんでした</span>';currentImgData=null;">`;
-}
-
-function cardImgHTML(r, i) {
-  if (r.image) return `<img src="${r.image}" alt="${r.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
-  return r.emoji || '🍽';
-}
-
+/* =====================================================
+   テーマ
+   ===================================================== */
 const THEMES = [
-  { id:'t-harvest', label:'ハーベストオレンジ',
-    dots:['#ffffff','#F6DC9A','#60A468','#D38C42'],
-    css:`--bg:#fffbf4;--paper:#ffffff;--paper2:#fef5e4;--ink:#2a3d28;--ink-mid:#60A468;--ink-lt:#8fc498;--accent:#D38C42;--accent-lt:#fdefc8;--accent-md:#F6DC9A;--sub:#60A468;--border:#b8ddb8;--border2:#60A468;--rule:#d8ecd8;--tape:rgba(96,164,104,0.4);` },
+  { id:'t-harvest', label:'ハーベストオレンジ', dots:['#ffffff','#F6DC9A','#60A468','#D38C42'],
+    css:`--bg:#fffbf4;--paper:#ffffff;--paper2:#fef5e4;--ink:#2a3d28;--ink-mid:#60A468;--ink-lt:#8fc498;--accent:#D38C42;--accent-lt:#fdefc8;--accent-md:#F6DC9A;--sub:#60A468;--border:#b8ddb8;--border2:#60A468;--rule:#d8ecd8;--tape:rgba(96,164,104,0.4);` }
 ];
-
 let currentTheme = 't-harvest';
 
 function applyTheme(id) {
-  const t = THEMES.find(x => x.id === id);
-  if (!t) return;
-  let styleEl = document.getElementById('dynamic-theme');
-  if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'dynamic-theme'; document.head.appendChild(styleEl); }
-  styleEl.textContent = `:root { ${t.css} }`;
+  const t = THEMES.find(x=>x.id===id); if (!t) return;
+  let s = document.getElementById('dynamic-theme');
+  if (!s) { s=document.createElement('style'); s.id='dynamic-theme'; document.head.appendChild(s); }
+  s.textContent = `:root{${t.css}}`;
   currentTheme = id;
 }
-
 function buildThemeBar() {
-  const bar = document.getElementById('theme-bar-inner');
-  bar.innerHTML = THEMES.map(t => `
-    <div class="theme-swatch ${t.id === currentTheme ? 'active' : ''}" onclick="setTheme('${t.id}')" title="${t.label}">
-      <div class="swatch-dots">${t.dots.map(c => `<div class="swatch-dot" style="background:${c}"></div>`).join('')}</div>
-      <span class="swatch-label">${t.label}</span>
-    </div>`).join('');
+  const bar = document.getElementById('theme-bar-inner'); if (!bar) return;
+  bar.innerHTML = THEMES.map(t=>`<div class="theme-swatch ${t.id===currentTheme?'active':''}" onclick="setTheme('${t.id}')" title="${t.label}"><div class="swatch-dots">${t.dots.map(c=>`<div class="swatch-dot" style="background:${c}"></div>`).join('')}</div><span class="swatch-label">${t.label}</span></div>`).join('');
 }
-
 function buildColorPicker() {
-  const el = document.getElementById('color-picker');
-  if (!el) return;
-  el.innerHTML = THEMES.map(t => `
-    <div onclick="setTheme('${t.id}')" style="cursor:pointer;border:2px solid ${t.id===currentTheme?'var(--accent)':'var(--border)'};border-radius:6px;padding:8px;text-align:center;transition:border-color .2s;">
-      <div style="display:flex;justify-content:center;gap:4px;margin-bottom:5px;">
-        ${t.dots.map(c=>`<div style="width:16px;height:16px;border-radius:50%;background:${c};border:1px solid rgba(0,0,0,0.1);"></div>`).join('')}
-      </div>
-      <div style="font-size:0.75rem;color:var(--ink-mid);font-family:'Zen Kurenaido',sans-serif;">${t.label}</div>
-    </div>`).join('');
+  const el = document.getElementById('color-picker'); if (!el) return;
+  el.innerHTML = THEMES.map(t=>`<div onclick="setTheme('${t.id}')" style="cursor:pointer;border:2px solid ${t.id===currentTheme?'var(--accent)':'var(--border)'};border-radius:6px;padding:8px;text-align:center;"><div style="display:flex;justify-content:center;gap:4px;margin-bottom:5px;">${t.dots.map(c=>`<div style="width:16px;height:16px;border-radius:50%;background:${c};border:1px solid rgba(0,0,0,0.1);"></div>`).join('')}</div><div style="font-size:0.75rem;color:var(--ink-mid);font-family:'Zen Kurenaido',sans-serif;">${t.label}</div></div>`).join('');
 }
+function setTheme(id) { applyTheme(id); buildThemeBar(); buildColorPicker(); }
 
-function setTheme(id) {
-  applyTheme(id);
-  buildThemeBar();
-  buildColorPicker();
+/* =====================================================
+   レシピ表示
+   ===================================================== */
+function cardImgHTML(r) {
+  if (r.image) return `<img src="${r.image}" alt="${r.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+  return r.emoji || '🍽';
 }
+const BG = ['bg0','bg1','bg2','bg3','bg4','bg5'];
 
-function toggleSection(secId, visible) {
-  const el = document.getElementById(secId);
-  if (el) el.style.display = visible ? '' : 'none';
-}
-
-applyTheme(currentTheme);
-buildThemeBar();
-document.getElementById('theme-bar').style.display = 'none';
-
-/* SITE_DATA からカラー・セクション状態を復元（変数宣言後に実行） */
-if (_sd) {
-  if (_sd.themeCss) {
-    let s = document.getElementById('dynamic-theme') || document.createElement('style');
-    s.id = 'dynamic-theme'; s.textContent = _sd.themeCss;
-    if (!s.parentNode) document.head.appendChild(s);
-  }
-  if (_sd.sections) {
-    ['videos','gallery','favorites'].forEach(k => {
-      if (_sd.sections[k] === false) {
-        const el = document.getElementById('sec-'+k);
-        if (el) el.style.display = 'none';
-      }
-    });
-  }
-}
-
-function renderRecipes(){
-  const grid=document.getElementById('recipes-grid');
-  const filtered=recipes.filter(r=>{
-    const c=currentCat==='all'||r.category===currentCat;
-    const q=currentSearch.toLowerCase();
-    const s=!q||r.title.includes(q)||r.desc.includes(q)||r.tags.some(t=>t.includes(q));
-    return c&&s;
+function renderRecipes() {
+  const grid = document.getElementById('recipes-grid');
+  const filtered = recipes.filter(r => {
+    const c = currentCat==='all' || r.category===currentCat;
+    const q = currentSearch.toLowerCase();
+    const s = !q || r.title.includes(q) || r.desc.includes(q) || r.tags.some(t=>t.includes(q));
+    return c && s;
   });
-  if(!filtered.length){grid.innerHTML='<p style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--ink-lt);font-family:\'Kaisei Opti\',serif;font-style:italic;">レシピが見つかりませんでした</p>';return;}
-  grid.innerHTML=filtered.map((r,i)=>`
+  if (!filtered.length) { grid.innerHTML='<p style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--ink-lt);font-family:\'Kaisei Opti\',serif;font-style:italic;">レシピが見つかりませんでした</p>'; return; }
+  grid.innerHTML = filtered.map((r,i) => `
     <div class="recipe-card" onclick="openModal(${r.id})">
       <div class="card-img">
-        <div class="card-img-bg bg${i%6}">${cardImgHTML(r,i)}</div>
+        <div class="card-img-bg ${BG[i%6]}">${cardImgHTML(r)}</div>
         <button class="card-fav ${favorites.has(r.id)?'active':''}" onclick="toggleFav(event,${r.id})">${favorites.has(r.id)?'♥':'♡'}</button>
         <span class="card-cat">${r.catLabel}</span>
       </div>
@@ -1392,15 +1358,15 @@ function renderRecipes(){
     </div>`).join('');
 }
 
-function renderFavorites(){
-  const grid=document.getElementById('fav-grid');
-  document.getElementById('fav-count').textContent=favorites.size;
-  const favs=recipes.filter(r=>favorites.has(r.id));
-  if(!favs.length){grid.innerHTML='<div class="fav-empty"><span class="empty-icon">♡</span><p>気になったレシピに印をつけてみてください</p></div>';return;}
-  grid.innerHTML=favs.map((r,i)=>`
+function renderFavorites() {
+  const grid = document.getElementById('fav-grid');
+  document.getElementById('fav-count').textContent = favorites.size;
+  const favs = recipes.filter(r=>favorites.has(r.id));
+  if (!favs.length) { grid.innerHTML='<div class="fav-empty"><span class="empty-icon">♡</span><p>気になったレシピに印をつけてみてください</p></div>'; return; }
+  grid.innerHTML = favs.map((r,i) => `
     <div class="recipe-card" onclick="openModal(${r.id})">
       <div class="card-img">
-        <div class="card-img-bg bg${i%6}">${cardImgHTML(r,i)}</div>
+        <div class="card-img-bg ${BG[i%6]}">${cardImgHTML(r)}</div>
         <button class="card-fav active" onclick="toggleFav(event,${r.id})">♥</button>
         <span class="card-cat">${r.catLabel}</span>
       </div>
@@ -1412,89 +1378,108 @@ function renderFavorites(){
     </div>`).join('');
 }
 
-function toggleFav(e,id){e.stopPropagation();favorites.has(id)?favorites.delete(id):favorites.add(id);renderRecipes();renderFavorites();}
-function filterCat(cat,btn){currentCat=cat;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderRecipes();}
-function filterRecipes(){currentSearch=document.getElementById('search-input').value;renderRecipes();}
-function openModal(id){
-  const r = recipes.find(x => x.id === id);
+function toggleFav(e,id) { e.stopPropagation(); favorites.has(id)?favorites.delete(id):favorites.add(id); renderRecipes(); renderFavorites(); }
+function filterCat(cat,btn) { currentCat=cat; document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderRecipes(); }
+function filterRecipes() { currentSearch=document.getElementById('search-input').value; renderRecipes(); }
+
+function openModal(id) {
+  const r = recipes.find(x=>x.id===id);
   const frame = document.getElementById('modal-photo-frame');
-
-  // 写真 or 絵文字をセット
   if (r.image) {
-    frame.innerHTML = `<img class="modal-photo-img" src="${r.image}" alt="${r.title}" onclick="openLightbox('${r.image.replace(/'/g,"\\'")}')" title="クリックで拡大">`;
+    frame.innerHTML = `<img class="modal-photo-img" src="${r.image}" alt="${r.title}" onclick="openLightbox('${r.image.replace(/'/g,"\\'")}') " title="クリックで拡大">`;
   } else {
-    frame.innerHTML = `<div class="modal-photo-emoji">${r.emoji || '🍽'}</div>`;
+    frame.innerHTML = `<div class="modal-photo-emoji">${r.emoji||'🍽'}</div>`;
   }
-
   document.getElementById('modal-photo-caption').textContent = r.title;
   document.getElementById('modal-cat').textContent = r.catLabel;
   document.getElementById('modal-title').textContent = r.title;
   document.getElementById('modal-meta').innerHTML = `<span>⏱ ${r.time}</span><span>${r.level}</span>`;
-  document.getElementById('modal-ing').innerHTML = r.ingredients.map(i => `<li><span>${i[0]}</span><span>${i[1]}</span></li>`).join('');
-  document.getElementById('modal-steps').innerHTML = r.steps.map((s,i) => `<li><div class="step-n">${i+1}</div><span>${s}</span></li>`).join('');
+  document.getElementById('modal-ing').innerHTML = r.ingredients.map(i=>`<li><span>${i[0]}</span><span>${i[1]}</span></li>`).join('');
+  document.getElementById('modal-steps').innerHTML = r.steps.map((s,i)=>`<li><div class="step-n">${i+1}</div><span>${s}</span></li>`).join('');
   document.getElementById('modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-function closeModal(e){if(e.target.id==='modal')closeModalBtn();}
-function closeModalBtn(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';}
+function closeModal(e) { if (e.target.id==='modal') closeModalBtn(); }
+function closeModalBtn() { document.getElementById('modal').classList.remove('open'); document.body.style.overflow=''; }
 
-renderRecipes();
-renderFavorites();
-renderSlideshow();
+/* =====================================================
+   ダウンロード — recipes.js
+   ===================================================== */
+function downloadRecipes() {
+  const content =
+`/* =====================================================
+   recipes.js — おうちごはん帖 レシピデータ
+   更新日時: ${new Date().toLocaleString('ja-JP')}
+   ===================================================== */
+var RECIPES_DATA = ${JSON.stringify(recipes, null, 2)};
+`;
+  _download(content, 'recipes.js', 'text/javascript');
+  _showMsg('dl-recipes-msg', '✓ recipes.js をダウンロードしました！GitHubに上書きしてください。');
+}
 
-/* ===== data.js ダウンロード ===== */
-function downloadSite() {
-  // 現在のカラーCSS取得
+/* =====================================================
+   ダウンロード — settings.js
+   ===================================================== */
+function downloadSettings() {
   const dynStyle = document.getElementById('dynamic-theme');
   const themeCss = dynStyle ? dynStyle.textContent.trim() : '';
-
-  // セクション表示状態
   const sections = {};
   ['videos','gallery','favorites'].forEach(k => {
     const el = document.getElementById('sec-'+k);
     sections[k] = !el || el.style.display !== 'none';
   });
-
-  // SITE_DATA オブジェクトを構築
-  const data = {
-    adminEmail:    ADMIN_EMAIL,
-    adminPw:       ADMIN_PW,
-    themeCss:      themeCss,
-    sections:      sections,
-    slideImages:   slideImages,
-    slideInterval: slideIntervalMs,
-    recipes:       recipes
-  };
-
+  const data = { adminEmail:ADMIN_EMAIL, adminPw:ADMIN_PW, themeCss, sections, slideImages, slideInterval:slideIntervalMs };
   const content =
-`/* ===================================================
-   data.js — おうちごはん帖 共有データファイル
-   管理画面の「データを保存」ボタンで上書き更新します
+`/* =====================================================
+   settings.js — おうちごはん帖 サイト設定
    更新日時: ${new Date().toLocaleString('ja-JP')}
-   =================================================== */
-SITE_DATA = ${JSON.stringify(data, null, 2)};
+   ===================================================== */
+var SETTINGS_DATA = ${JSON.stringify(data, null, 2)};
 `;
-
-  const blob = new Blob([content], { type: 'text/javascript;charset=utf-8' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'data.js';
-  a.click();
-  URL.revokeObjectURL(a.href);
-
-  const msg = document.getElementById('dl-msg');
-  if (msg) {
-    msg.textContent = '✓ data.js をダウンロードしました！フォルダに上書きしてNetlifyに再アップロードしてください。';
-    msg.style.display = 'block';
-    setTimeout(() => { msg.style.display='none'; msg.textContent='✓ データを保存しました！'; }, 5000);
-  }
+  _download(content, 'settings.js', 'text/javascript');
+  _showMsg('dl-settings-msg', '✓ settings.js をダウンロードしました！GitHubに上書きしてください。');
 }
 
-// spec tab features
+function _download(content, filename, type) {
+  const blob = new Blob([content], { type: type+';charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function _showMsg(id, text) {
+  const msg = document.getElementById(id);
+  if (!msg) return;
+  msg.textContent = text;
+  msg.style.display = 'block';
+  setTimeout(()=>msg.style.display='none', 5000);
+}
+
+/* =====================================================
+   起動
+   ===================================================== */
+applyTheme('t-harvest');
+buildThemeBar();
+document.getElementById('theme-bar').style.display = 'none';
+
+/* settings.js からセクション・スライド設定を復元 */
+if (SETTINGS_DATA.sections) {
+  ['videos','gallery','favorites'].forEach(k => {
+    if (SETTINGS_DATA.sections[k]===false) {
+      const el = document.getElementById('sec-'+k); if (el) el.style.display='none';
+    }
+  });
+}
+
+renderRecipes();
+renderFavorites();
+renderSlideshow();
+
+/* spec tab features */
 (function(){
-  const el = document.getElementById('spec-features');
-  if (!el) return;
-  const features = ['テキスト検索','カテゴリ絞り込み','お気に入り登録','レシピ詳細モーダル','写真対応','ヒーロースライドショー','カラーカスタマイズ','セクション表示切替','管理画面（メール＋PW）','写真拡大（ライトボックス）','HTMLダウンロード保存'];
+  const el = document.getElementById('spec-features'); if (!el) return;
+  const features = ['テキスト検索','カテゴリ絞り込み','お気に入り登録','レシピ詳細モーダル','写真対応','ヒーロースライドショー','カラーカスタマイズ','セクション表示切替','管理画面（メール＋PW）','写真拡大（ライトボックス）','recipes.js / settings.js 分離保存'];
   el.innerHTML = features.map(f=>`<span style="background:var(--accent-lt);color:var(--ink);font-size:0.74rem;padding:.15rem .6rem;border-radius:3px;border:1px solid var(--border2);">${f}</span>`).join('');
 })();
 </script>
