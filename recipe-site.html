@@ -9,7 +9,7 @@
 var RECIPES_DATA = [];
 var SETTINGS_DATA = {
   adminEmail:'admin@example.com', adminPw:'admin1234',
-  themeCss:'', sections:{videos:true,gallery:true,favorites:true},
+  themeCss:'', sections:{gallery:true},
   slideImages:[], slideInterval:5000
 };
 </script>
@@ -317,8 +317,7 @@ nav a:hover::after { transform:scaleX(1) rotate(-1deg); }
 .img-tabs { display:flex; margin-bottom:.7rem; border:1.5px solid var(--border2); border-radius:3px; overflow:hidden; }
 .img-tab { flex:1; padding:.4rem; text-align:center; font-size:0.8rem; cursor:pointer; background:transparent; border:none; color:var(--ink-mid); font-family:'Zen Kurenaido',sans-serif; transition:all .2s; }
 .img-tab.active { background:var(--ink); color:var(--paper); }
-.card-fav { position:absolute; top:.7rem; right:.7rem; width:30px; height:30px; background:rgba(255,255,255,0.9); border:1.5px solid var(--border2); border-radius:3px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:0.88rem; transition:all .2s; z-index:3; }
-.card-fav:hover, .card-fav.active { background:var(--accent); border-color:var(--accent); color:white; }
+/* card-fav removed */
 .card-cat { position:absolute; bottom:.65rem; left:.65rem; background:rgba(0,0,0,0.55); color:#fff; font-family:'Caveat',cursive; font-size:0.82rem; letter-spacing:0.08em; padding:.18rem .55rem; border-radius:2px; }
 .card-body { padding:1rem 1.1rem 1.3rem; border-top:1.5px solid var(--border); }
 .card-meta { font-family:'Caveat',cursive; font-size:0.92rem; color:var(--ink-lt); margin-bottom:.35rem; display:flex; gap:1rem; }
@@ -576,9 +575,7 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
   <a href="#" class="logo">おうちごはん帖</a>
   <nav>
     <a href="#recipes">レシピ</a>
-    <a href="#videos">動画</a>
     <a href="#gallery">ギャラリー</a>
-    <a href="#favorites" class="nav-fav">♡ お気に入り <span id="fav-count">0</span></a>
   </nav>
 </header>
 
@@ -590,7 +587,6 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
       <p class="hero-sub">手間をかけすぎず、でも丁寧に。<br>家族みんなが笑顔になれるレシピを集めました。</p>
       <div class="hero-btns">
         <a href="#recipes" class="btn-main">レシピを見る</a>
-        <a href="#videos" class="btn-ghost">動画を見る</a>
       </div>
     </div>
     <div id="hero-slideshow-wrap">
@@ -626,42 +622,14 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
   <div class="recipes-grid" id="recipes-grid"></div>
 </div>
 
-<div id="sec-videos" class="section-bg">
-  <div class="section" id="videos">
-    <div class="video-inner">
-      <div class="video-text">
-        <span class="v-label">動画で確認できます</span>
-        <h2>作り方を<br><em>動画で見る</em></h2>
-        <p>文字だけでは伝わりにくい工程も、動画でわかりやすくご紹介しています。初めての方もぜひ。</p>
-        <a href="#" class="btn-main">すべての動画を見る</a>
-      </div>
-      <div class="video-frame">
-        <div class="video-ph" onclick="alert('YouTube / Vimeo などを埋め込めます')">
-          <div class="play-btn">▶</div>
-          <span>やさしい煮込み料理の作り方</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div id="sec-gallery" class="section ruled" id="gallery">
-  <div class="sec-header"><h2 class="sec-title">フォトギャラリー</h2><a href="#" class="sec-link">Instagramを見る →</a></div>
+  <div class="sec-header"><h2 class="sec-title">フォトギャラリー</h2><a href="https://www.instagram.com/__ntno__recipe/" target="_blank" class="sec-link">Instagramを見る →</a></div>
   <div class="gallery-grid">
     <div class="photo-cell"><div class="photo-ph">🍲</div></div>
     <div class="photo-cell"><div class="photo-ph">🥬</div></div>
     <div class="photo-cell"><div class="photo-ph">🍞</div></div>
     <div class="photo-cell"><div class="photo-ph">☕</div></div>
     <div class="photo-cell"><div class="photo-ph">🍰</div></div>
-  </div>
-</div>
-
-<div id="sec-favorites" class="section-bg" id="favorites">
-  <div class="section">
-    <div class="sec-header"><h2 class="sec-title">♡ お気に入りレシピ</h2></div>
-    <div class="recipes-grid" id="fav-grid">
-      <div class="fav-empty"><span class="empty-icon">♡</span><p>気になったレシピに印をつけてみてください</p></div>
-    </div>
   </div>
 </div>
 
@@ -738,18 +706,14 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
           </div>
         </div>
         <div class="adm-field">
-          <label>写真</label>
-          <div class="img-tabs">
-            <button class="img-tab active" onclick="switchImgTab('upload',this)">📁 ファイルをアップロード</button>
-            <button class="img-tab" onclick="switchImgTab('url',this)">🔗 URLを入力</button>
+          <label>写真URL</label>
+          <p style="font-size:0.78rem;color:var(--ink-mid);margin-bottom:.5rem;line-height:1.7;">GitHubの <code style="background:var(--paper2);padding:1px 5px;border-radius:3px;font-size:0.82rem;">images</code> フォルダに写真をアップロードして、ファイル名を入力してください。</p>
+          <div style="display:flex;gap:.5rem;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--ink-lt);white-space:nowrap;">images/</span>
+            <input type="text" id="f-img-filename" placeholder="recipe1.jpg" oninput="previewImgFile(this.value)" style="flex:1;">
           </div>
-          <div id="img-upload-area">
-            <input type="file" id="f-img-file" accept="image/*" onchange="previewFile(this)" style="width:100%;font-size:0.84rem;">
-          </div>
-          <div id="img-url-area" style="display:none;">
-            <input type="text" id="f-img-url" placeholder="https://例：example.com/photo.jpg" oninput="previewUrl(this.value)">
-          </div>
-          <div class="img-preview" id="img-preview"><span>プレビューがここに表示されます</span></div>
+          <p style="font-size:0.76rem;color:var(--ink-lt);margin-top:.3rem;">空白のままにすると絵文字アイコンが表示されます。</p>
+          <div class="img-preview" id="img-preview" style="margin-top:.6rem;"><span>ファイル名を入力するとプレビューが表示されます</span></div>
         </div>
         <div class="adm-field">
           <label>レシピ名</label>
@@ -810,10 +774,14 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
       <!-- スライドショータブ -->
       <div id="tab-slideshow" style="display:none">
         <div class="adm-section-title">ヒーロースライドショー</div>
-        <p style="font-size:0.82rem;color:var(--ink-mid);margin-bottom:1rem;">トップページのスライドショーに表示する写真を管理できます。複数枚登録すると自動で切り替わります。</p>
+        <p style="font-size:0.82rem;color:var(--ink-mid);margin-bottom:1rem;">GitHubの <code style="background:var(--paper2);padding:1px 5px;border-radius:3px;">images</code> フォルダに写真をアップロードして、ファイル名を追加してください。</p>
         <div class="adm-field">
-          <label>写真を追加（複数選択可）</label>
-          <input type="file" id="slide-upload" accept="image/*" multiple onchange="addSlideImages(this)" style="width:100%;font-size:0.84rem;">
+          <label>写真を追加</label>
+          <div style="display:flex;gap:.5rem;align-items:center;">
+            <span style="font-size:0.82rem;color:var(--ink-lt);white-space:nowrap;">images/</span>
+            <input type="text" id="slide-filename" placeholder="slide1.jpg" style="flex:1;">
+            <button onclick="addSlideByFilename()" style="background:var(--accent);color:#fff;border:none;padding:.5rem 1rem;border-radius:3px;font-family:'Zen Kurenaido',sans-serif;font-size:0.84rem;cursor:pointer;white-space:nowrap;">追加</button>
+          </div>
         </div>
         <div class="adm-field">
           <label>自動切替の間隔</label>
@@ -873,16 +841,8 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
         <p style="font-size:0.82rem;color:var(--ink-mid);margin-bottom:1rem;">不要なセクションをオフにするとサイトから非表示になります。</p>
         <div style="display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.6rem;">
           <label style="display:flex;align-items:center;justify-content:space-between;padding:.7rem 1rem;border:1.5px solid var(--border);border-radius:3px;cursor:pointer;font-size:0.88rem;">
-            <span>🎬 動画セクション</span>
-            <input type="checkbox" id="vis-videos" checked onchange="toggleSection('sec-videos',this.checked)" style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer;">
-          </label>
-          <label style="display:flex;align-items:center;justify-content:space-between;padding:.7rem 1rem;border:1.5px solid var(--border);border-radius:3px;cursor:pointer;font-size:0.88rem;">
             <span>🖼 フォトギャラリー</span>
             <input type="checkbox" id="vis-gallery" checked onchange="toggleSection('sec-gallery',this.checked)" style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer;">
-          </label>
-          <label style="display:flex;align-items:center;justify-content:space-between;padding:.7rem 1rem;border:1.5px solid var(--border);border-radius:3px;cursor:pointer;font-size:0.88rem;">
-            <span>♡ お気に入りセクション</span>
-            <input type="checkbox" id="vis-favorites" checked onchange="toggleSection('sec-favorites',this.checked)" style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer;">
           </label>
         </div>
 
@@ -948,7 +908,6 @@ let slideIntervalMs = SETTINGS_DATA.slideInterval  || 5000;
 let adminUnlocked   = false;
 let slideIndex      = 0;
 let slideTimer      = null;
-let favorites       = new Set();
 let currentCat      = 'all';
 let currentSearch   = '';
 let currentImgData  = null;
@@ -1054,14 +1013,6 @@ function updateSlideInterval() {
   slideIntervalMs = parseInt(document.getElementById('slide-interval').value);
   startSlideTimer();
 }
-function addSlideImages(input) {
-  Array.from(input.files).forEach(file => {
-    const reader = new FileReader();
-    reader.onload = e => { slideImages.push(e.target.result); renderSlideshow(); renderSlideThumbs(); };
-    reader.readAsDataURL(file);
-  });
-  input.value = '';
-}
 function renderSlideThumbs() {
   const row = document.getElementById('slide-thumb-row');
   if (!row) return;
@@ -1080,34 +1031,29 @@ function deleteSlide(i) {
 }
 
 /* =====================================================
-   写真入力（管理画面）
+   写真入力（管理画面）— imagesフォルダ参照方式
    ===================================================== */
-function switchImgTab(mode, btn) {
-  document.getElementById('img-upload-area').style.display = mode==='upload' ? 'block' : 'none';
-  document.getElementById('img-url-area').style.display   = mode==='url'    ? 'block' : 'none';
-  document.querySelectorAll('.img-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  clearImgPreview();
-}
-function clearImgPreview() {
-  document.getElementById('img-preview').innerHTML = '<span>プレビューがここに表示されます</span>';
-  const fi = document.getElementById('f-img-file'); if (fi) fi.value='';
-  const ui = document.getElementById('f-img-url');  if (ui) ui.value='';
-  currentImgData = null;
-}
-function previewFile(input) {
-  const file = input.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    currentImgData = e.target.result;
-    document.getElementById('img-preview').innerHTML = `<img src="${currentImgData}">`;
-  };
-  reader.readAsDataURL(file);
-}
-function previewUrl(url) {
-  if (!url) { document.getElementById('img-preview').innerHTML='<span>プレビューがここに表示されます</span>'; currentImgData=null; return; }
+function previewImgFile(filename) {
+  const preview = document.getElementById('img-preview');
+  if (!filename.trim()) {
+    preview.innerHTML = '<span>ファイル名を入力するとプレビューが表示されます</span>';
+    currentImgData = null;
+    return;
+  }
+  const url = 'images/' + filename.trim();
   currentImgData = url;
-  document.getElementById('img-preview').innerHTML = `<img src="${url}" onerror="this.parentElement.innerHTML='<span>画像を読み込めませんでした</span>';currentImgData=null;">`;
+  preview.innerHTML = `<img src="${url}" onerror="this.parentElement.innerHTML='<span>画像を読み込めませんでした（GitHubにアップ後に確認してください）</span>';currentImgData=null;">`;
+}
+
+function addSlideByFilename() {
+  const input = document.getElementById('slide-filename');
+  const filename = input.value.trim();
+  if (!filename) { alert('ファイル名を入力してください'); return; }
+  const url = 'images/' + filename;
+  slideImages.push(url);
+  input.value = '';
+  renderSlideshow();
+  renderSlideThumbs();
 }
 
 /* =====================================================
@@ -1147,12 +1093,12 @@ function addRecipe() {
   });
   const newId = recipes.length ? Math.max(...recipes.map(r=>r.id)) + 1 : 1;
   recipes.push({ id:newId, emoji, image:currentImgData||null, category:cat, catLabel:catMap[cat], title, desc, time, level, tags, ingredients:ings, steps });
-  ['f-emoji','f-title','f-desc','f-time','f-tags'].forEach(id => document.getElementById(id).value='');
+  ['f-emoji','f-title','f-desc','f-time','f-tags','f-img-filename'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
   document.getElementById('ing-rows').innerHTML = '<div class="ing-row"><input type="text" placeholder="材料名"><input type="text" placeholder="分量" style="max-width:100px"><button class="del-row" onclick="delRow(this)">×</button></div><div class="ing-row"><input type="text" placeholder="材料名"><input type="text" placeholder="分量" style="max-width:100px"><button class="del-row" onclick="delRow(this)">×</button></div>';
   document.getElementById('step-rows').innerHTML = '<div class="step-row"><input type="text" placeholder="手順1"><button class="del-row" onclick="delRow(this)">×</button></div><div class="step-row"><input type="text" placeholder="手順2"><button class="del-row" onclick="delRow(this)">×</button></div>';
   clearImgPreview();
   const suc = document.getElementById('adm-success'); suc.style.display='block'; setTimeout(()=>suc.style.display='none', 2500);
-  renderRecipes(); renderFavorites();
+  renderRecipes();
 }
 
 function renderAdmList() {
@@ -1172,7 +1118,7 @@ function deleteRecipe(id) {
   if (!confirm('このレシピを削除しますか？')) return;
   const idx = recipes.findIndex(r=>r.id===id);
   if (idx !== -1) recipes.splice(idx, 1);
-  renderAdmList(); renderRecipes(); renderFavorites();
+  renderAdmList(); renderRecipes();
 }
 
 /* =====================================================
@@ -1192,11 +1138,9 @@ function switchTab(name, btn) {
     const ss = document.getElementById('spec-slides'); if (ss) ss.textContent = slideImages.length+'枚';
   }
   if (name === 'settings') {
-    ['videos','gallery','favorites'].forEach(s => {
-      const el = document.getElementById('sec-'+s);
-      const cb = document.getElementById('vis-'+s);
-      if (el && cb) cb.checked = el.style.display !== 'none';
-    });
+    const el = document.getElementById('sec-gallery');
+    const cb = document.getElementById('vis-gallery');
+    if (el && cb) cb.checked = el.style.display !== 'none';
   }
 }
 
@@ -1243,7 +1187,7 @@ function renderRecipes() {
     <div class="recipe-card" onclick="openModal(${r.id})">
       <div class="card-img">
         <div class="card-img-bg ${BG[i%6]}">${cardImgHTML(r)}</div>
-        <button class="card-fav ${favorites.has(r.id)?'active':''}" onclick="toggleFav(event,${r.id})">${favorites.has(r.id)?'♥':'♡'}</button>
+
         <span class="card-cat">${r.catLabel}</span>
       </div>
       <div class="card-body">
@@ -1255,27 +1199,6 @@ function renderRecipes() {
     </div>`).join('');
 }
 
-function renderFavorites() {
-  const grid = document.getElementById('fav-grid');
-  document.getElementById('fav-count').textContent = favorites.size;
-  const favs = recipes.filter(r=>favorites.has(r.id));
-  if (!favs.length) { grid.innerHTML='<div class="fav-empty"><span class="empty-icon">♡</span><p>気になったレシピに印をつけてみてください</p></div>'; return; }
-  grid.innerHTML = favs.map((r,i) => `
-    <div class="recipe-card" onclick="openModal(${r.id})">
-      <div class="card-img">
-        <div class="card-img-bg ${BG[i%6]}">${cardImgHTML(r)}</div>
-        <button class="card-fav active" onclick="toggleFav(event,${r.id})">♥</button>
-        <span class="card-cat">${r.catLabel}</span>
-      </div>
-      <div class="card-body">
-        <div class="card-meta"><span>⏱ ${r.time}</span><span>${r.level}</span></div>
-        <h3 class="card-title">${r.title}</h3>
-        <p class="card-desc">${r.desc}</p>
-      </div>
-    </div>`).join('');
-}
-
-function toggleFav(e,id) { e.stopPropagation(); favorites.has(id)?favorites.delete(id):favorites.add(id); renderRecipes(); renderFavorites(); }
 function filterCat(cat,btn) { currentCat=cat; document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderRecipes(); }
 function filterRecipes() { currentSearch=document.getElementById('search-input').value; renderRecipes(); }
 
@@ -1335,7 +1258,7 @@ function downloadSettings() {
   }
 
   const sections = {};
-  ['videos','gallery','favorites'].forEach(k => {
+  ['gallery'].forEach(k => {
     const el = document.getElementById('sec-'+k);
     sections[k] = !el || el.style.display !== 'none';
   });
@@ -1373,7 +1296,7 @@ function _showMsg(id, text) {
    ===================================================== */
 /* settings.js からセクション・スライド設定を復元 */
 if (SETTINGS_DATA.sections) {
-  ['videos','gallery','favorites'].forEach(k => {
+  ['gallery'].forEach(k => {
     if (SETTINGS_DATA.sections[k]===false) {
       const el = document.getElementById('sec-'+k); if (el) el.style.display='none';
     }
@@ -1381,7 +1304,7 @@ if (SETTINGS_DATA.sections) {
 }
 
 renderRecipes();
-renderFavorites();
+
 renderSlideshow();
 
 /* spec tab features */
