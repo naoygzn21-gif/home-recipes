@@ -574,21 +574,13 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
 </header>
 
 <section class="hero ruled">
-  <div class="hero-inner">
+  <div class="hero-inner" style="grid-template-columns:1fr;max-width:720px;">
     <div>
       <span class="hero-label">— 家族のための、毎日のレシピ —</span>
       <h1 class="hero-title">食卓を<br><em>もっと豊かに</em></h1>
       <p class="hero-sub">手間をかけすぎず、でも丁寧に。<br>家族みんなが笑顔になれるレシピを集めました。</p>
       <div class="hero-btns">
         <a href="#recipes" class="btn-main">レシピを見る</a>
-      </div>
-    </div>
-    <div id="hero-slideshow-wrap">
-      <div class="hero-slideshow" id="hero-slideshow">
-        <div class="hero-slide active" style="background:var(--accent-lt);">🍳</div>
-        <div class="slide-prev" onclick="slidePrev()">◀</div>
-        <div class="slide-next" onclick="slideNext()">▶</div>
-        <div class="slide-dots" id="slide-dots"></div>
       </div>
     </div>
   </div>
@@ -747,7 +739,6 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
       <div class="adm-tabs">
         <div class="adm-tab active" onclick="switchTab('add',this)">レシピを追加</div>
         <div class="adm-tab" onclick="switchTab('list',this)">一覧・削除</div>
-        <div class="adm-tab" onclick="switchTab('slideshow',this)">スライドショー</div>
         <div class="adm-tab" onclick="switchTab('instagram',this)">ギャラリー</div>
         <div class="adm-tab" onclick="switchTab('settings',this)">設定</div>
         <div class="adm-tab" onclick="switchTab('spec',this)">サイト仕様</div>
@@ -832,33 +823,6 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
         <div style="margin-top:1.2rem;padding-top:1rem;border-top:1.5px dashed var(--border);">
           <button onclick="downloadRecipes()" style="width:100%;background:var(--accent);color:#fff;border:none;padding:.72rem;border-radius:3px;font-family:'Kaisei Opti',serif;font-size:0.95rem;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">⬇ レシピを保存（recipes.js）</button>
           <div id="dl-recipes-msg-list" style="font-size:0.8rem;color:#0f6e56;text-align:center;margin-top:.5rem;display:none;"></div>
-        </div>
-      </div>
-
-      <!-- スライドショータブ -->
-      <div id="tab-slideshow" style="display:none">
-        <div class="adm-section-title">ヒーロースライドショー</div>
-        <p style="font-size:0.82rem;color:var(--ink-mid);margin-bottom:1rem;">GoogleドライブのURLをそのまま貼ると自動変換します。</p>
-        <div class="adm-field">
-          <label>写真を追加</label>
-          <div style="display:flex;gap:.5rem;align-items:center;">
-            <input type="text" id="slide-filename" placeholder="https://drive.google.com/file/d/XXXX/view" style="flex:1;">
-            <button onclick="addSlideByFilename()" style="background:var(--accent);color:#fff;border:none;padding:.5rem 1rem;border-radius:3px;font-family:'Zen Kurenaido',sans-serif;font-size:0.84rem;cursor:pointer;white-space:nowrap;">追加</button>
-          </div>
-        </div>
-        <div class="adm-field">
-          <label>自動切替の間隔</label>
-          <select id="slide-interval" onchange="updateSlideInterval()" style="width:100%;border:1.5px solid var(--border2);border-radius:3px;padding:.5rem .8rem;font-family:'Zen Kurenaido',sans-serif;font-size:0.88rem;background:var(--bg);color:var(--ink);">
-            <option value="3000">3秒</option>
-            <option value="5000" selected>5秒</option>
-            <option value="8000">8秒</option>
-            <option value="0">自動切替なし</option>
-          </select>
-        </div>
-        <div style="margin-top:.5rem;">
-          <div style="font-size:0.8rem;color:var(--ink-mid);margin-bottom:.5rem;">登録済みの写真（クリックで先頭に移動）</div>
-          <div class="slide-thumb-row" id="slide-thumb-row"></div>
-          <p style="font-size:0.78rem;color:var(--ink-lt);margin-top:.5rem;">写真が0枚のときはデフォルトの絵文字が表示されます。</p>
         </div>
       </div>
 
@@ -988,12 +952,8 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
 /* --- 状態変数 --- */
 let ADMIN_EMAIL     = SETTINGS_DATA.adminEmail    || 'admin@example.com';
 let ADMIN_PW        = SETTINGS_DATA.adminPw       || 'admin1234';
-let slideImages     = (SETTINGS_DATA.slideImages  || []).slice();
-let slideIntervalMs = SETTINGS_DATA.slideInterval  || 5000;
 let instagramPosts  = (SETTINGS_DATA.instagramPosts || []).slice();
 let adminUnlocked   = false;
-let slideIndex      = 0;
-let slideTimer      = null;
 let currentCat      = 'all';
 let currentSearch   = '';
 let currentImgData  = null;
@@ -1134,74 +1094,17 @@ function moveIgPost(i, dir) {
 }
 
 /* =====================================================
-   スライドショー
-   ===================================================== */
-function renderSlideshow() {
-  const ss = document.getElementById('hero-slideshow');
-  if (!ss) return;
-  const prev = ss.querySelector('.slide-prev');
-  const next = ss.querySelector('.slide-next');
-  const dotsEl = document.getElementById('slide-dots');
-  ss.querySelectorAll('.hero-slide').forEach(s => s.remove());
-  if (slideImages.length === 0) {
-    const def = document.createElement('div');
-    def.className = 'hero-slide active';
-    def.style.background = 'var(--accent-lt)';
-    def.textContent = '🍳';
-    ss.insertBefore(def, prev);
-    dotsEl.innerHTML = '';
-    return;
-  }
-  slideImages.forEach((src, i) => {
-    const s = document.createElement('div');
-    s.className = 'hero-slide' + (i === slideIndex ? ' active' : '');
-    const img = document.createElement('img');
-    img.src = src;
-    s.appendChild(img);
-    ss.insertBefore(s, prev);
-  });
-  dotsEl.innerHTML = slideImages.map((_,i) =>
-    `<div class="slide-dot ${i===slideIndex?'active':''}" onclick="goSlide(${i})"></div>`
-  ).join('');
-  startSlideTimer();
-}
-function goSlide(n) { slideIndex = (n + slideImages.length) % slideImages.length; renderSlideshow(); }
-function slidePrev() { if (slideImages.length) goSlide(slideIndex - 1); }
-function slideNext() { if (slideImages.length) goSlide(slideIndex + 1); }
-function startSlideTimer() {
-  if (slideTimer) clearInterval(slideTimer);
-  if (slideIntervalMs > 0 && slideImages.length > 1)
-    slideTimer = setInterval(() => goSlide(slideIndex + 1), slideIntervalMs);
-}
-function updateSlideInterval() {
-  slideIntervalMs = parseInt(document.getElementById('slide-interval').value);
-  startSlideTimer();
-}
-function renderSlideThumbs() {
-  const row = document.getElementById('slide-thumb-row');
-  if (!row) return;
-  row.innerHTML = slideImages.map((src,i) => `
-    <div class="slide-thumb" onclick="goSlide(${i});renderSlideThumbs();">
-      <img src="${src}">
-      <button class="slide-thumb-del" onclick="event.stopPropagation();deleteSlide(${i})">×</button>
-    </div>`).join('') || '<span style="font-size:0.82rem;color:var(--ink-lt);">まだ写真がありません</span>';
-  const el = document.getElementById('spec-slides');
-  if (el) el.textContent = slideImages.length + '枚';
-}
-function deleteSlide(i) {
-  slideImages.splice(i, 1);
-  if (slideIndex >= slideImages.length) slideIndex = Math.max(0, slideImages.length - 1);
-  renderSlideshow(); renderSlideThumbs();
-}
-
-/* =====================================================
    写真入力（管理画面）— URL入力・Googleドライブ自動変換
    ===================================================== */
 function convertGDriveUrl(url) {
-  // Google DriveのURLをダイレクト表示用に変換
-  // https://drive.google.com/file/d/FILE_ID/view → https://drive.google.com/uc?export=view&id=FILE_ID
-  const match = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
-  if (match) return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  if (!url) return url;
+  // Google DriveのURLをサムネイルAPIに変換（より安定）
+  // https://drive.google.com/file/d/FILE_ID/view → https://drive.google.com/thumbnail?id=FILE_ID&sz=w800
+  const match = url.match(/drive\.google\.com\/file\/d\/([^/?\s]+)/);
+  if (match) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800`;
+  // すでにuc?export=view形式の場合もthumbnailに変換
+  const match2 = url.match(/drive\.google\.com\/uc\?.*id=([^&\s]+)/);
+  if (match2) return `https://drive.google.com/thumbnail?id=${match2[1]}&sz=w800`;
   return url;
 }
 
@@ -1215,17 +1118,6 @@ function previewImgUrl(rawUrl) {
   const url = convertGDriveUrl(rawUrl.trim());
   currentImgData = url;
   preview.innerHTML = `<img src="${url}" onerror="this.parentElement.innerHTML='<span>画像を読み込めませんでした。URLを確認してください。</span>';currentImgData=null;">`;
-}
-
-function addSlideByFilename() {
-  const input = document.getElementById('slide-filename');
-  const filename = input.value.trim();
-  if (!filename) { alert('ファイル名を入力してください'); return; }
-  const url = convertGDriveUrl(filename);
-  slideImages.push(url);
-  input.value = '';
-  renderSlideshow();
-  renderSlideThumbs();
 }
 
 /* =====================================================
@@ -1388,14 +1280,13 @@ function deleteRecipe(id) {
    タブ切替
    ===================================================== */
 function switchTab(name, btn) {
-  ['add','list','slideshow','instagram','settings','spec'].forEach(t => {
+  ['add','list','instagram','settings','spec'].forEach(t => {
     const el = document.getElementById('tab-'+t);
     if (el) el.style.display = t===name ? 'block' : 'none';
   });
   document.querySelectorAll('.adm-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   if (name === 'list') renderAdmList();
-  if (name === 'slideshow') renderSlideThumbs();
   if (name === 'instagram') renderIgPostList();
   if (name === 'spec') {
     const sc = document.getElementById('spec-count'); if (sc) sc.textContent = recipes.length+'件';
@@ -1527,7 +1418,7 @@ function downloadSettings() {
     sections[k] = !el || el.style.display !== 'none';
   });
 
-  const data = { adminEmail:ADMIN_EMAIL, adminPw:ADMIN_PW, themeCss, sections, slideImages, slideInterval:slideIntervalMs, instagramPosts };
+  const data = { adminEmail:ADMIN_EMAIL, adminPw:ADMIN_PW, themeCss, sections, instagramPosts };
   const content =
 `/* =====================================================
    settings.js — おうちごはん帖 サイト設定
@@ -1568,7 +1459,6 @@ if (SETTINGS_DATA.sections) {
 }
 
 renderRecipes();
-renderSlideshow();
 renderInstagramGallery();
 
 /* spec tab features */

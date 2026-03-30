@@ -7,7 +7,5 @@ var SETTINGS_DATA = {
   adminPw:         "admin1234",
   themeCss:        "",
   sections:        { gallery: true },
-  slideImages:     [],
-  slideInterval:   5000,
   instagramPosts:  []
 };
