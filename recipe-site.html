@@ -340,18 +340,12 @@ nav a:hover::after { transform:scaleX(1) rotate(-1deg); }
 .video-ph:hover .play-btn { transform:scale(1.1); }
 
 /* ===== GALLERY ===== */
-.gallery-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:180px 180px; gap:1rem; margin-top:2rem; }
-.gallery-grid .photo-cell:first-child { grid-column:span 2; grid-row:span 2; }
-.photo-cell { border:2px solid var(--ink); border-radius:3px; overflow:hidden; cursor:pointer; transition:transform .25s, box-shadow .25s; }
-.photo-cell:nth-child(1){transform:rotate(-0.5deg);} .photo-cell:nth-child(2){transform:rotate(0.6deg);} .photo-cell:nth-child(3){transform:rotate(-0.4deg);} .photo-cell:nth-child(4){transform:rotate(0.5deg);} .photo-cell:nth-child(5){transform:rotate(-0.3deg);}
-.photo-cell:hover { transform:rotate(0deg) scale(1.03); box-shadow:4px 4px 0 var(--border2); }
-.photo-ph { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:2.4rem; background:var(--accent-lt); transition:transform .35s, background .3s; }
-.photo-cell:first-child .photo-ph { font-size:3.8rem; }
-.photo-cell:nth-child(2) .photo-ph { opacity:0.85; }
-.photo-cell:nth-child(3) .photo-ph { opacity:0.7; }
-.photo-cell:nth-child(4) .photo-ph { opacity:0.9; }
-.photo-cell:nth-child(5) .photo-ph { opacity:0.75; }
-.photo-cell:hover .photo-ph { transform:scale(1.05); }
+/* ===== INSTAGRAM GALLERY ===== */
+.instagram-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:2rem; }
+.instagram-cell { position:relative; border:2px solid var(--ink); border-radius:3px; overflow:hidden; background:var(--paper2); aspect-ratio:1; }
+.instagram-cell blockquote { margin:0 !important; min-width:unset !important; width:100% !important; }
+.ig-placeholder { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.5rem; color:var(--ink-lt); font-size:0.82rem; font-family:'Zen Kurenaido',sans-serif; text-align:center; padding:1rem; background:var(--accent-lt); }
+.ig-placeholder a { color:var(--accent); font-size:0.78rem; word-break:break-all; }
 
 /* ===== FAVORITES ===== */
 .fav-empty { text-align:center; padding:2.5rem; color:var(--ink-lt); }
@@ -566,7 +560,7 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
 }
 
 @media(max-width:900px) { .hero-inner,.video-inner{grid-template-columns:1fr;gap:2.5rem;} .hero::before,.search-wrap::before,.section::before,footer::before{display:none;} .hero-inner,.search-inner,.section,footer{padding-left:2rem;} }
-@media(max-width:680px) { .recipes-grid .recipe-card:first-child{grid-column:span 1;} .gallery-grid{grid-template-columns:repeat(2,1fr);grid-template-rows:auto;} .gallery-grid .photo-cell:first-child{grid-column:span 2;} nav{display:none;} }
+@media(max-width:680px) { .recipes-grid .recipe-card:first-child{grid-column:span 1;} .instagram-grid{grid-template-columns:repeat(2,1fr);} nav{display:none;} }
 </style>
 </head>
 <body class="t-indigo">
@@ -623,13 +617,10 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
 </div>
 
 <div id="sec-gallery" class="section ruled" id="gallery">
-  <div class="sec-header"><h2 class="sec-title">フォトギャラリー</h2><a href="https://www.instagram.com/__ntno__recipe/" target="_blank" class="sec-link">Instagramを見る →</a></div>
-  <div class="gallery-grid">
-    <div class="photo-cell"><div class="photo-ph">🍲</div></div>
-    <div class="photo-cell"><div class="photo-ph">🥬</div></div>
-    <div class="photo-cell"><div class="photo-ph">🍞</div></div>
-    <div class="photo-cell"><div class="photo-ph">☕</div></div>
-    <div class="photo-cell"><div class="photo-ph">🍰</div></div>
+  <div class="sec-header"><h2 class="sec-title">フォトギャラリー</h2><a href="https://www.instagram.com/___ntno__recipe/" target="_blank" rel="noopener noreferrer" class="sec-link">Instagramを見る →</a></div>
+  <div id="instagram-grid" class="instagram-grid"></div>
+  <div id="instagram-empty" style="text-align:center;padding:2.5rem;color:var(--ink-lt);font-family:'Kaisei Opti',serif;font-style:italic;display:none;">
+    管理画面からInstagramの投稿URLを追加してください
   </div>
 </div>
 
@@ -682,6 +673,7 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
         <div class="adm-tab active" onclick="switchTab('add',this)">レシピを追加</div>
         <div class="adm-tab" onclick="switchTab('list',this)">一覧・削除</div>
         <div class="adm-tab" onclick="switchTab('slideshow',this)">スライドショー</div>
+        <div class="adm-tab" onclick="switchTab('instagram',this)">ギャラリー</div>
         <div class="adm-tab" onclick="switchTab('settings',this)">設定</div>
         <div class="adm-tab" onclick="switchTab('spec',this)">サイト仕様</div>
       </div>
@@ -707,13 +699,10 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
         </div>
         <div class="adm-field">
           <label>写真URL</label>
-          <p style="font-size:0.78rem;color:var(--ink-mid);margin-bottom:.5rem;line-height:1.7;">GitHubの <code style="background:var(--paper2);padding:1px 5px;border-radius:3px;font-size:0.82rem;">images</code> フォルダに写真をアップロードして、ファイル名を入力してください。</p>
-          <div style="display:flex;gap:.5rem;align-items:center;">
-            <span style="font-size:0.82rem;color:var(--ink-lt);white-space:nowrap;">images/</span>
-            <input type="text" id="f-img-filename" placeholder="recipe1.jpg" oninput="previewImgFile(this.value)" style="flex:1;">
-          </div>
+          <p style="font-size:0.78rem;color:var(--ink-mid);margin-bottom:.5rem;line-height:1.7;">GoogleドライブのURLをそのまま貼ると自動変換します。<br><span style="color:var(--ink-lt);">例：drive.google.com/file/d/○○/view → 自動で表示用URLに変換</span></p>
+          <input type="text" id="f-img-url" placeholder="https://drive.google.com/file/d/XXXX/view" oninput="previewImgUrl(this.value)">
           <p style="font-size:0.76rem;color:var(--ink-lt);margin-top:.3rem;">空白のままにすると絵文字アイコンが表示されます。</p>
-          <div class="img-preview" id="img-preview" style="margin-top:.6rem;"><span>ファイル名を入力するとプレビューが表示されます</span></div>
+          <div class="img-preview" id="img-preview" style="margin-top:.6rem;"><span>URLを入力するとプレビューが表示されます</span></div>
         </div>
         <div class="adm-field">
           <label>レシピ名</label>
@@ -774,12 +763,11 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
       <!-- スライドショータブ -->
       <div id="tab-slideshow" style="display:none">
         <div class="adm-section-title">ヒーロースライドショー</div>
-        <p style="font-size:0.82rem;color:var(--ink-mid);margin-bottom:1rem;">GitHubの <code style="background:var(--paper2);padding:1px 5px;border-radius:3px;">images</code> フォルダに写真をアップロードして、ファイル名を追加してください。</p>
+        <p style="font-size:0.82rem;color:var(--ink-mid);margin-bottom:1rem;">GoogleドライブのURLをそのまま貼ると自動変換します。</p>
         <div class="adm-field">
           <label>写真を追加</label>
           <div style="display:flex;gap:.5rem;align-items:center;">
-            <span style="font-size:0.82rem;color:var(--ink-lt);white-space:nowrap;">images/</span>
-            <input type="text" id="slide-filename" placeholder="slide1.jpg" style="flex:1;">
+            <input type="text" id="slide-filename" placeholder="https://drive.google.com/file/d/XXXX/view" style="flex:1;">
             <button onclick="addSlideByFilename()" style="background:var(--accent);color:#fff;border:none;padding:.5rem 1rem;border-radius:3px;font-family:'Zen Kurenaido',sans-serif;font-size:0.84rem;cursor:pointer;white-space:nowrap;">追加</button>
           </div>
         </div>
@@ -796,6 +784,28 @@ footer p { font-family:'Caveat',cursive; font-size:1rem; color:rgba(255,255,255,
           <div style="font-size:0.8rem;color:var(--ink-mid);margin-bottom:.5rem;">登録済みの写真（クリックで先頭に移動）</div>
           <div class="slide-thumb-row" id="slide-thumb-row"></div>
           <p style="font-size:0.78rem;color:var(--ink-lt);margin-top:.5rem;">写真が0枚のときはデフォルトの絵文字が表示されます。</p>
+        </div>
+      </div>
+
+      <!-- ギャラリータブ -->
+      <div id="tab-instagram" style="display:none">
+        <div class="adm-section-title">Instagramギャラリー</div>
+        <p style="font-size:0.82rem;color:var(--ink-mid);margin-bottom:1rem;line-height:1.8;">InstagramのURLを登録するとギャラリーに埋め込み表示されます。<br>投稿ページのURLをそのまま貼り付けてください。<br><span style="color:var(--ink-lt);font-size:0.78rem;">例：https://www.instagram.com/p/XXXXXXXXX/</span></p>
+        <div class="adm-field">
+          <label>投稿URLを追加</label>
+          <div style="display:flex;gap:.5rem;">
+            <input type="text" id="ig-url-input" placeholder="https://www.instagram.com/p/XXXX/" style="flex:1;">
+            <button onclick="addInstagramPost()" style="background:var(--accent);color:#fff;border:none;padding:.5rem 1rem;border-radius:3px;font-family:'Zen Kurenaido',sans-serif;font-size:0.84rem;cursor:pointer;white-space:nowrap;">追加</button>
+          </div>
+        </div>
+        <div style="margin-top:.5rem;">
+          <div style="font-size:0.8rem;color:var(--ink-mid);margin-bottom:.5rem;">登録済みの投稿</div>
+          <div id="ig-post-list"></div>
+          <p style="font-size:0.78rem;color:var(--ink-lt);margin-top:.5rem;">最大9件まで表示されます。</p>
+        </div>
+        <div style="margin-top:1.2rem;padding-top:1rem;border-top:1.5px dashed var(--border);">
+          <button onclick="downloadSettings()" style="width:100%;background:var(--sub);color:#fff;border:none;padding:.72rem;border-radius:3px;font-family:'Kaisei Opti',serif;font-size:0.95rem;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">⬇ 設定を保存（settings.js）</button>
+          <div id="dl-settings-msg-ig" style="font-size:0.8rem;color:#0f6e56;text-align:center;margin-top:.5rem;display:none;"></div>
         </div>
       </div>
 
@@ -905,6 +915,7 @@ let ADMIN_EMAIL     = SETTINGS_DATA.adminEmail    || 'admin@example.com';
 let ADMIN_PW        = SETTINGS_DATA.adminPw       || 'admin1234';
 let slideImages     = (SETTINGS_DATA.slideImages  || []).slice();
 let slideIntervalMs = SETTINGS_DATA.slideInterval  || 5000;
+let instagramPosts  = (SETTINGS_DATA.instagramPosts || []).slice();
 let adminUnlocked   = false;
 let slideIndex      = 0;
 let slideTimer      = null;
@@ -970,6 +981,69 @@ function closeLightbox() {
 }
 
 /* =====================================================
+   Instagramギャラリー
+   ===================================================== */
+function renderInstagramGallery() {
+  const grid = document.getElementById('instagram-grid');
+  const empty = document.getElementById('instagram-empty');
+  if (!grid) return;
+  if (!instagramPosts.length) {
+    grid.innerHTML = '';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+  grid.innerHTML = instagramPosts.slice(0, 9).map(url => `
+    <div class="instagram-cell">
+      <blockquote class="instagram-media"
+        data-instgrm-permalink="${url}"
+        data-instgrm-version="14"
+        style="width:100%;margin:0;">
+      </blockquote>
+    </div>`).join('');
+  // Instagram埋め込みスクリプトを再実行
+  if (window.instgrm) {
+    window.instgrm.Embeds.process();
+  } else {
+    const s = document.createElement('script');
+    s.src = 'https://www.instagram.com/embed.js';
+    s.async = true;
+    document.body.appendChild(s);
+  }
+}
+
+function addInstagramPost() {
+  const input = document.getElementById('ig-url-input');
+  const url = input.value.trim();
+  if (!url || !url.includes('instagram.com/p/')) {
+    alert('InstagramのURLを入力してください\n例：https://www.instagram.com/p/XXXXX/');
+    return;
+  }
+  if (instagramPosts.includes(url)) { alert('すでに登録済みです'); return; }
+  if (instagramPosts.length >= 9) { alert('最大9件まで登録できます'); return; }
+  instagramPosts.push(url);
+  input.value = '';
+  renderInstagramGallery();
+  renderIgPostList();
+}
+
+function removeInstagramPost(i) {
+  instagramPosts.splice(i, 1);
+  renderInstagramGallery();
+  renderIgPostList();
+}
+
+function renderIgPostList() {
+  const list = document.getElementById('ig-post-list');
+  if (!list) return;
+  list.innerHTML = instagramPosts.length ? instagramPosts.map((url, i) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:.5rem .8rem;border:1px solid var(--border);border-radius:3px;margin-bottom:.4rem;font-size:0.8rem;">
+      <span style="color:var(--ink-mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${url}</span>
+      <button onclick="removeInstagramPost(${i})" style="background:transparent;border:1px solid var(--border2);color:var(--accent);border-radius:3px;padding:2px 8px;font-size:0.76rem;cursor:pointer;margin-left:.5rem;flex-shrink:0;">削除</button>
+    </div>`).join('') : '<p style="font-size:0.82rem;color:var(--ink-lt);">まだ投稿が登録されていません</p>';
+}
+
+/* =====================================================
    スライドショー
    ===================================================== */
 function renderSlideshow() {
@@ -1031,25 +1105,33 @@ function deleteSlide(i) {
 }
 
 /* =====================================================
-   写真入力（管理画面）— imagesフォルダ参照方式
+   写真入力（管理画面）— URL入力・Googleドライブ自動変換
    ===================================================== */
-function previewImgFile(filename) {
+function convertGDriveUrl(url) {
+  // Google DriveのURLをダイレクト表示用に変換
+  // https://drive.google.com/file/d/FILE_ID/view → https://drive.google.com/uc?export=view&id=FILE_ID
+  const match = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+  if (match) return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  return url;
+}
+
+function previewImgUrl(rawUrl) {
   const preview = document.getElementById('img-preview');
-  if (!filename.trim()) {
-    preview.innerHTML = '<span>ファイル名を入力するとプレビューが表示されます</span>';
+  if (!rawUrl.trim()) {
+    preview.innerHTML = '<span>URLを入力するとプレビューが表示されます</span>';
     currentImgData = null;
     return;
   }
-  const url = 'images/' + filename.trim();
+  const url = convertGDriveUrl(rawUrl.trim());
   currentImgData = url;
-  preview.innerHTML = `<img src="${url}" onerror="this.parentElement.innerHTML='<span>画像を読み込めませんでした（GitHubにアップ後に確認してください）</span>';currentImgData=null;">`;
+  preview.innerHTML = `<img src="${url}" onerror="this.parentElement.innerHTML='<span>画像を読み込めませんでした。URLを確認してください。</span>';currentImgData=null;">`;
 }
 
 function addSlideByFilename() {
   const input = document.getElementById('slide-filename');
   const filename = input.value.trim();
   if (!filename) { alert('ファイル名を入力してください'); return; }
-  const url = 'images/' + filename;
+  const url = convertGDriveUrl(filename.startsWith('http') ? filename : 'images/' + filename);
   slideImages.push(url);
   input.value = '';
   renderSlideshow();
@@ -1093,7 +1175,7 @@ function addRecipe() {
   });
   const newId = recipes.length ? Math.max(...recipes.map(r=>r.id)) + 1 : 1;
   recipes.push({ id:newId, emoji, image:currentImgData||null, category:cat, catLabel:catMap[cat], title, desc, time, level, tags, ingredients:ings, steps });
-  ['f-emoji','f-title','f-desc','f-time','f-tags','f-img-filename'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  ['f-emoji','f-title','f-desc','f-time','f-tags','f-img-url'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
   document.getElementById('ing-rows').innerHTML = '<div class="ing-row"><input type="text" placeholder="材料名"><input type="text" placeholder="分量" style="max-width:100px"><button class="del-row" onclick="delRow(this)">×</button></div><div class="ing-row"><input type="text" placeholder="材料名"><input type="text" placeholder="分量" style="max-width:100px"><button class="del-row" onclick="delRow(this)">×</button></div>';
   document.getElementById('step-rows').innerHTML = '<div class="step-row"><input type="text" placeholder="手順1"><button class="del-row" onclick="delRow(this)">×</button></div><div class="step-row"><input type="text" placeholder="手順2"><button class="del-row" onclick="delRow(this)">×</button></div>';
   clearImgPreview();
@@ -1125,7 +1207,7 @@ function deleteRecipe(id) {
    タブ切替
    ===================================================== */
 function switchTab(name, btn) {
-  ['add','list','slideshow','settings','spec'].forEach(t => {
+  ['add','list','slideshow','instagram','settings','spec'].forEach(t => {
     const el = document.getElementById('tab-'+t);
     if (el) el.style.display = t===name ? 'block' : 'none';
   });
@@ -1133,6 +1215,7 @@ function switchTab(name, btn) {
   btn.classList.add('active');
   if (name === 'list') renderAdmList();
   if (name === 'slideshow') renderSlideThumbs();
+  if (name === 'instagram') renderIgPostList();
   if (name === 'spec') {
     const sc = document.getElementById('spec-count'); if (sc) sc.textContent = recipes.length+'件';
     const ss = document.getElementById('spec-slides'); if (ss) ss.textContent = slideImages.length+'枚';
@@ -1263,7 +1346,7 @@ function downloadSettings() {
     sections[k] = !el || el.style.display !== 'none';
   });
 
-  const data = { adminEmail:ADMIN_EMAIL, adminPw:ADMIN_PW, themeCss, sections, slideImages, slideInterval:slideIntervalMs };
+  const data = { adminEmail:ADMIN_EMAIL, adminPw:ADMIN_PW, themeCss, sections, slideImages, slideInterval:slideIntervalMs, instagramPosts };
   const content =
 `/* =====================================================
    settings.js — おうちごはん帖 サイト設定
@@ -1304,8 +1387,8 @@ if (SETTINGS_DATA.sections) {
 }
 
 renderRecipes();
-
 renderSlideshow();
+renderInstagramGallery();
 
 /* spec tab features */
 (function(){
